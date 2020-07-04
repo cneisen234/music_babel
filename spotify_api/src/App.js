@@ -19,6 +19,10 @@ class App extends Component {
         album: 'album',
         song: 'song',
         image: 'image',
+        id: 'id',
+      },
+      relatedArtists: {
+        artists: [],
       }
     }
     if (params.access_token){
@@ -84,15 +88,41 @@ class App extends Component {
           const randomCountry = Math.floor(Math.random() * countries.length);
           spotifyWebApi.searchTracks(this.getRandomSearch(), { limit: 50, offset: randomOffset, market: countries[randomCountry]})
           .then((response) =>{
-            console.log(response.tracks.items[randomIndex])
+            console.log('randomSong', response.tracks.items[randomIndex].artists[0].id)
             this.setState({
               randomSong: {
                 artist: response.tracks.items[randomIndex].artists[0].name,
                 album: response.tracks.items[randomIndex].album.name,
                 song: response.tracks.items[randomIndex].name,
                 image: response.tracks.items[randomIndex].album.images[0].url,
+                id: response.tracks.items[randomIndex].artists[0].id
               }
             })
+            this.getRelatedArtists()
+          }).catch ((error) => {
+            console.log('song not found, rerunning');
+            this.randomSong();
+
+          });
+        }
+
+        getRelatedArtists() {
+          spotifyWebApi.getArtistRelatedArtists(this.state.randomSong.id)
+          .then((response) => {
+            console.log('getRelatedArtists', response.artists[0].name)
+            let artistsArray = [];
+            for (let i = 0; i < response.artists.length; i++) {
+              const element = response.artists[i];
+              console.log('element', element.name)
+              artistsArray.push(element.name)
+            }
+            console.log('artistsArray', artistsArray)
+            this.setState({
+              relatedArtists: {
+                artists: artistsArray
+              }
+            })
+            console.log('instate', this.state.relatedArtists.artists)
           })
         }
 
@@ -109,12 +139,12 @@ class App extends Component {
           })
         }
   render() {
+    const { artists } = this.state.relatedArtists;
   return (
     <div className="App">
       <a href='http://localhost:8888'>
    <button>Login With Spotify</button>
-   
-   {JSON.stringify(this.state.randomSong)}
+   {JSON.stringify(artists)}
    </a>
    <div>Now Playing: { this.state.nowPlaying.name }</div>
    <div><img src={ this.state.nowPlaying.image } style={{ width: 100}}/></div>
@@ -124,6 +154,7 @@ class App extends Component {
    <div>Album: {this.state.randomSong.album}</div>
    <div>Track: {this.state.randomSong.song}</div>
    <div><img src={this.state.randomSong.image} style={{ width: 100 }} /></div>
+      <ul>Similar Artists:{artists.map((artist) => { return <li>{artist}{console.log('artists', artist)}</li>})}</ul>
     </div>
   );
   }
