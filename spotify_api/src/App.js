@@ -5,6 +5,13 @@ import Spotify from "spotify-web-api-js";
 const spotifyWebApi = new Spotify();
 
 class App extends Component {
+  componentDidMount() {
+    setInterval(() => {
+      this.getNowPlaying();
+      this.forceUpdate();
+      console.log('force rerender')
+    }, 20000);
+  }
   constructor(){
     super();
     const params = this.getHashParams();
@@ -12,7 +19,9 @@ class App extends Component {
       loggedIn: params.access_token ? true : false,
       nowPlaying: {
         name: 'Not Checked',
-        image: ''
+        artist: '',
+        album: '',
+        image: '',
       },
       randomSong: {
         artist: 'artist',
@@ -88,14 +97,15 @@ class App extends Component {
           const randomCountry = Math.floor(Math.random() * countries.length);
           spotifyWebApi.searchTracks(this.getRandomSearch(), { limit: 50, offset: randomOffset, market: countries[randomCountry]})
           .then((response) =>{
-            console.log('randomSong', response.tracks.items[randomIndex].artists[0].id)
+            console.log('randomSong', response.tracks.items[randomIndex].external_urls.spotify)
             this.setState({
               randomSong: {
                 artist: response.tracks.items[randomIndex].artists[0].name,
                 album: response.tracks.items[randomIndex].album.name,
                 song: response.tracks.items[randomIndex].name,
                 image: response.tracks.items[randomIndex].album.images[0].url,
-                id: response.tracks.items[randomIndex].artists[0].id
+                id: response.tracks.items[randomIndex].artists[0].id,
+                open: response.tracks.items[randomIndex].external_urls.spotify
               }
             })
             this.getRelatedArtists()
@@ -109,52 +119,61 @@ class App extends Component {
         getRelatedArtists() {
           spotifyWebApi.getArtistRelatedArtists(this.state.randomSong.id)
           .then((response) => {
-            console.log('getRelatedArtists', response.artists[0].name)
             let artistsArray = [];
             for (let i = 0; i < response.artists.length; i++) {
               const element = response.artists[i];
-              console.log('element', element.name)
               artistsArray.push(element.name)
             }
-            console.log('artistsArray', artistsArray)
             this.setState({
               relatedArtists: {
                 artists: artistsArray
               }
             })
-            console.log('instate', this.state.relatedArtists.artists)
           })
         }
 
         getNowPlaying() {
           spotifyWebApi.getMyCurrentPlaybackState()
           .then((response) => {
-            console.log(response)
+            console.log('getNowPlaying', response)
+            if (!response) {
+              return;
+            }
             this.setState({
               nowPlaying: {
                 name: response.item.name,
+                artist: response.item.artists[0].name,
+                album: response.item.album.name,
                 image: response.item.album.images[0].url
               }
             })
           })
         }
   render() {
+    // setInterval(() => {
+    //   this.getNowPlaying()
+    //   this.forceUpdate()
+    // }, 20000);
     const { artists } = this.state.relatedArtists;
   return (
     <div className="App">
       <a href='http://localhost:8888'>
    <button>Login With Spotify</button>
-   {JSON.stringify(artists)}
    </a>
-   <div>Now Playing: { this.state.nowPlaying.name }</div>
+   <div>Now Playing: <ul>
+     <li>Track: { this.state.nowPlaying.name }</li>
+        <li>Artist: {this.state.nowPlaying.artist}</li>
+        <li>Album: {this.state.nowPlaying.album}</li>
+     </ul></div>
    <div><img src={ this.state.nowPlaying.image } style={{ width: 100}}/></div>
-   <button onClick={() => this.getNowPlaying()}>Check Now Playing</button>
+      <button onClick={() => this.getNowPlaying()}>Get Now Playing</button>
    <button onClick={() => this.randomSong()}>Generate Random Song</button>
    <div>Artist: {this.state.randomSong.artist}</div>
    <div>Album: {this.state.randomSong.album}</div>
    <div>Track: {this.state.randomSong.song}</div>
    <div><img src={this.state.randomSong.image} style={{ width: 100 }} /></div>
-      <ul>Similar Artists:{artists.map((artist) => { return <li>{artist}{console.log('artists', artist)}</li>})}</ul>
+   <a href={this.state.randomSong.open} target='_blank'><button>Open this song in spotify</button></a>
+      <ul>Similar Artists:{artists.map((artist, index) => { return <li key={index}>{artist}</li>})}</ul>
     </div>
   );
   }
