@@ -1,4 +1,4 @@
-CREATE DATABASE "music_bable";
+CREATE DATABASE "music_babel";
 
 CREATE TABLE "user"
 (
@@ -19,3 +19,8 @@ CREATE TABLE "recommendation"
     "created_at" TIMESTAMP,
     "updated_at" TIMESTAMP
 ); 
+
+INSERT INTO "recommendation"
+    ("song", "artist", "album")
+VALUES
+    ('Settle', 'Two Door Cinema Club', 'Beacon');
