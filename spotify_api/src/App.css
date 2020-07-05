@@ -1,20 +1,81 @@
 .App {
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.photo0 {
+  background-image: url("https://img.pngio.com/cool-music-backgrounds-30-background-pictures-cool-musical-backgrounds-png-650_650.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
 }
+.photo1 {
+  background-image: url("https://i.ytimg.com/vi/A_vBpMVUNoY/maxresdefault.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo2 {
+  background-image: url("https://wallpaperinfinity.net/wp-content/uploads/2018/01/new-cool-music-backgrounds-note-800x600.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo3 {
+  background-image: url("https://wallpaperset.com/w/full/9/f/c/92796.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo4 {
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSsBJ-62-QADYbI6PyWvqVNfWyuE9xz4R3I7Q&usqp=CAU");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo5 {
+  background-image: url("https://i.ytimg.com/vi/6-HrB1lqTbw/maxresdefault.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo6 {
+  background-image: url("https://i.pinimg.com/236x/92/e3/7e/92e37e48c5b7e5936357fdc35118f7a5--music-wallpaper-iphone-wallpaper.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo7 {
+  background-image: url("https://png.pngtree.com/thumb_back/fh260/back_pic/04/49/58/98585ba90a29c63.jpg");
+  background-repeat: no-repeat;
+  background-size: cover
+  
+}
+.photo8 {
+  background-image: url("https://wallpapercave.com/wp/8l3J3Iu.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+}
+.photo9 {
+  background-image: url("https://labourenergy.org/wp-content/uploads/2020/01/cool-music-wallpapers-iphone.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+} 
+.photo10 {
+  background-image: url("https://i.pinimg.com/originals/19/0c/af/190cafd43d331acb5abd490d8df61d20.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+} 
+.photo11 {
+  background-image: url("https://wallpaperset.com/w/full/f/8/0/50163.jpg");
+    background-repeat: no-repeat;
+  background-size: cover
+} 
+               
+.App-title {
+  background-color: black;
+  padding: 1%;
+  border-radius: 30%;
+}        
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.input {
+  background-color: white;
+  color: black;
+  border-radius: 10px;
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,15 +87,6 @@
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 div, button {

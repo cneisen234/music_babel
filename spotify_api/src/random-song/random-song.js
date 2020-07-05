@@ -6,17 +6,6 @@ import Spotify from "spotify-web-api-js";
 const spotifyWebApi = new Spotify();
 
 class RandomSong extends Component {
-  goToAfterLogIn = () => {
-    this.props.history.push("/");
-  };
-  //reruns nowPlaying and forces an update every 20 seconds to keep current song displaying
-  componentDidMount() {
-    setInterval(() => {
-      this.getNowPlaying();
-      this.forceUpdate();
-      console.log("force rerender");
-    }, 20000);
-  }
   //saving in constructor, required for spotify api use
   constructor() {
     super();
@@ -177,8 +166,6 @@ class RandomSong extends Component {
         });
         //calls related artists function when randomSong is run
         this.getRelatedArtists();
-        //recalls NowPlaying when randomSong is called
-        this.getNowPlaying();
       })
       .catch((error) => {
         console.log("song not found, rerunning");
@@ -208,26 +195,7 @@ class RandomSong extends Component {
         });
       });
   }
-  //grabs playback info from logged in user.
-  getNowPlaying() {
-    //web api function used for playback
-    spotifyWebApi.getMyCurrentPlaybackState().then((response) => {
-      console.log("getNowPlaying", response);
-      //if response is undefined, return. Gaurds against errors if nothing is playing.
-      if (!response) {
-        return;
-      }
-      //set state with response
-      this.setState({
-        nowPlaying: {
-          name: response.item.name,
-          artist: response.item.artists[0].name,
-          album: response.item.album.name,
-          image: response.item.album.images[0].url,
-        },
-      });
-    });
-  }
+
   render() {
     //grabs artists info from getRelatedArtists, saves to varable.
     const { artists } = this.state.relatedArtists;
@@ -238,22 +206,6 @@ class RandomSong extends Component {
         <a href="http://localhost:8888">
           <button>Login With Spotify</button>
         </a>
-        {/* populates with current playing info */}
-        <div>
-          Now Playing:{" "}
-          <ul>
-            <li>Track: {this.state.nowPlaying.name}</li>
-            <li>Artist: {this.state.nowPlaying.artist}</li>
-            <li>Album: {this.state.nowPlaying.album}</li>
-          </ul>
-        </div>
-        <div>
-          <img
-            src={this.state.nowPlaying.image}
-            alt="album art"
-            style={{ width: 100 }}
-          />
-        </div>
         {/* generates random song */}
         <button onClick={() => this.randomSong()}>Generate Random Song</button>
         <div>Artist: {this.state.randomSong.artist}</div>

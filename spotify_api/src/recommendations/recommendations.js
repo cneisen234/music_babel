@@ -10,7 +10,7 @@ class Recommendations extends Component {
   render() {
     return (
       <div className="App">
-        <h1 className="App-title">RECOMMENDATIONS</h1>
+        <h1>RECOMMENDATIONS</h1>
         <div>
           <table id="musicTable">
             <thead>
