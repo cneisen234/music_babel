@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
 
-//GET all feedback
+//GET all recommendations
 router.get('/', (req, res) => {
     pool.query('SELECT * from "recommendation";').then((result) => {
         res.send(result.rows);
     }).catch((error) => {
-        console.log('Error GET /feedback', error)
+        console.log('Error GET /recommendations', error)
         res.sendStatus(500);
     });
 }) //end GET

@@ -85,6 +85,7 @@ class Adminitem extends Component {
     // grabs admin parem from map of parent
     const { musicitem } = this.props;
     return (
+      // displays list of recommended songs from database
       <tr>
         {/* table data for each mapped item */}
         <td>{musicitem.song}</td>

@@ -15,7 +15,7 @@ class Recommendations extends Component {
           <table id="musicTable">
             <thead>
               <tr>
-                {/* table headers for admin display */}
+                {/* table headers for recommendation display */}
                 <th>Title</th>
                 <th>Artist</th>
                 <th>Album</th>
@@ -24,7 +24,7 @@ class Recommendations extends Component {
             <tbody>
               {/* map through entire data query */}
               {this.props.reduxState.music.map((musicitem) => {
-                // create MovieItem component for each mapped item, pass movie in as props, this gives us access to everything
+                // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
                 return <MusicItem key={musicitem.id} musicitem={musicitem} />;
               })}
@@ -32,10 +32,10 @@ class Recommendations extends Component {
           </table>
         </div>
       </div>
-    );
-  }
-}
-
+    ); //end return
+  } //end render
+} //end Recommendations
+//redux state
 const mapReduxStateToProps = (reduxState) => ({
   reduxState,
 });

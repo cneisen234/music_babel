@@ -1,5 +1,7 @@
+-- database name
 CREATE DATABASE "music_babel";
 
+--to create user
 CREATE TABLE "user"
 (
     "id" serial primary key,
@@ -8,7 +10,7 @@ CREATE TABLE "user"
     "profile_pic" text,
     "logged_in" TIMESTAMP
 ); 
-
+--to create recommendation
 CREATE TABLE "recommendation"
 (
     "id" serial primary key,
@@ -19,7 +21,7 @@ CREATE TABLE "recommendation"
     "created_at" TIMESTAMP,
     "updated_at" TIMESTAMP
 ); 
-
+--sample insert value for recommendation for testing purposes
 INSERT INTO "recommendation"
     ("song", "artist", "album")
 VALUES
