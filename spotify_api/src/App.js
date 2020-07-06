@@ -6,11 +6,15 @@ import { HashRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 //define class of new Spotify into spotifyWebApi
 import RandomSong from "./random-song/random-song"
 import Recommendations from "./recommendations/recommendations"
+import { connect } from 'react-redux';
 import Header from "./Header/Header";
 const spotifyWebApi = new Spotify();
 
 //main App component, this acts as the parent for all components on page
 class App extends Component {
+  componentDidMount() {
+    this.props.dispatch({ type: 'FETCH_USER' })
+  }
   
   render() {
  
@@ -24,4 +28,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);

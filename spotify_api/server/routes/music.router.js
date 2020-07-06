@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../modules/pool');
+const {
+    rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
+const encryptLib = require("../modules/encryption");
+const userStrategy = require("../strategies/user.strategy");
 
 //GET all recommendations
 router.get('/', (req, res) => {
