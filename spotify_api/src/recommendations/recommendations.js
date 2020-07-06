@@ -77,6 +77,8 @@ class Recommendations extends Component {
       album: "",
     })
   };
+
+  
   // React render function
   render() {
     return (
@@ -142,6 +144,7 @@ class Recommendations extends Component {
                 <th>Artist</th>
                 <th>Album</th>
                 <th>Delete</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody>

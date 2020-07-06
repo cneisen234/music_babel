@@ -5,6 +5,13 @@ import swal from "sweetalert";
 import axios from "axios";
 
 class MusicItem extends Component {
+  state = {
+    username: "",
+    song: "",
+    artist: "",
+    album: "",
+    toggle: false,
+  }
   //refreshes database info on load
   componentDidMount() {
   
@@ -47,46 +54,68 @@ class MusicItem extends Component {
   }; //end deleteReview
 
   //flags the current review with a PUT request
-//   flagForReview = (event) => {
-//     //prevents default action
-//     event.preventDefault();
-//     //sweet alerts
-//     swal({
-//       title: "Flag this review?",
-//       text: `Did you want to report this review?`,
-//       icon: "warning",
-//       buttons: true,
-//       dangerMode: true,
-//       //end sweet alerts
-//     }).then((confirm) => {
-//       if (confirm) {
-//         axios({
-//           //start axios
-//           method: "PUT",
-//           url: `/confirm/${this.props.admin.id}`,
-//         }) //end axios
-//           .then((response) => {
-//             //start .then
-//           }) //end .then
-//           .catch((error) => {
-//             //start .catchError
-//             console.log(error);
-//           }); //end .catchError
-//         //success! Review flagged
-//         swal("This review has been flagged!", {
-//           icon: "success",
-//         });
-//       } else {
-//         //...else cancel
-//         swal("Flag request has been canceled!");
-//       }
-//       //reloads page showing current info from database with newly flagged item
-//       setTimeout(() => {
-//         window.location.reload();
-//       }, 1500);
-//     });
-//   };
+  editReview = (event) => {
+    //prevents default action
+    event.preventDefault();
+    //sweet alerts
+    const { username } = this.props.user;
+    const { song, artist, album } = this.state 
+    swal({
+      title: "Save changes?",
+      text: `${ this.props.user.username }'s recommendation:
+      review changes to entry below
+        Song: ${ song }
+        Artist: ${ artist }
+        Album: ${ album }
+        click "ok" to confirm`,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+      //end sweet alerts
+    }).then((confirm) => {
+      if (confirm) {
+        axios({
+          //start axios
+          method: "PUT",
+          url: `/music/${this.props.musicitem.id}`,
+          data: {
+            username: username,
+            song: song,
+            artist: artist,
+            album: album,
+          },
+        }) //end axios
+          .then((response) => {
+            //start .then
+          }) //end .then
+          .catch((error) => {
+            //start .catchError
+            console.log(error);
+          }); //end .catchError
+        //success! Review flagged
+        swal("Your changes have been saved!", {
+          icon: "success",
+        });
+      } else {
+        //...else cancel
+        swal("No changes were made!");
+      }
+      //reloads page showing current info from database with newly flagged item
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    });
+  };
 
+  handleChange = (event, fieldName) => {
+    this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
+  }; //end handleChange
+  
+  toggle = () => {
+    this.setState({
+      toggle: !this.state.toggle,
+    });
+  };
   render() {
     // grabs admin parem from map of parent
     const { musicitem } = this.props;
@@ -107,6 +136,76 @@ class MusicItem extends Component {
         >
           Delete
                 </Button></td>
+        <td><Button
+          onClick={this.toggle}
+          className="feedbackButton"
+          variant="contained"
+          color="secondary"
+          type="delete"
+        >
+          Edit
+                </Button></td>
+                {this.state.toggle === false ? (
+                  <span></span>
+                ) : (
+            <Paper
+              style={{
+                right: 0,
+                bottom: 0,
+                position: "fixed",
+                borderRadius: "10%",
+                height: "400px",
+                width: "400px",
+                fontSize: "15px",
+              }}
+              elevation="24"
+              className="loginBox"
+            ><td> <form onSubmit={this.editReview}>
+          <TextField
+            variant="outlined"
+            required
+            label="Song"
+            name="Song"
+            // sets value of input to local state
+            value={this.state.song}
+            type="text"
+            maxLength={1000}
+            onChange={(event) => this.handleChange(event, "song")} //onChange of input values set local state
+          />
+          <TextField
+            variant="outlined"
+            required
+            label="Artist"
+            name="Artist"
+            // sets value of input to local state
+            value={this.state.artist}
+            type="text"
+            maxLength={1000}
+            onChange={(event) => this.handleChange(event, "artist")} //onChange of input values set local state
+          />
+          <TextField
+            variant="outlined"
+            required
+            label="Album"
+            name="Album"
+            // sets value of input to local state
+            value={this.state.album}
+            type="text"
+            maxLength={1000}
+            onChange={(event) => this.handleChange(event, "album")} //onChange of input values set local state
+          />
+          <br />
+          {/* onClick tied to form element, runs submitInfo on click */}
+          <Button
+            className="recommendationButton"
+            variant="contained"
+            color="secondary"
+            type="submit"
+          >
+            Edit recommendation
+            </Button>
+        </form></td></Paper>
+                )}
 
         {/* clickable event, runs flagForReview function */}
         {/* formats timestamp with moment */}

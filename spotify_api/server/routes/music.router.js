@@ -79,21 +79,23 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
 
 //PUT to flag for review
 router.put("/:id", (req, res) => {
-    // let id = req.params.id; // grabs id and places it in path
-    // let queryText = `UPDATE feedback SET flagged = 'true' WHERE (flagged = 'false' AND id = $1)`;
-    // //....and uopdates it with put to flagged
-    // pool
-    //     .query(queryText, [id])
+    let id = req.params.id; // grabs id and places it in path
+    const music = req.body; // pull the object out out of the HTTP REQUEST
+    const { song, artist, album } = music
+    let queryText = `UPDATE recommendation SET song = $1, artist = $2, album = $3 WHERE  id = $4`;
+    //....and uopdates it with put to flagged
+    pool
+        .query(queryText, [song, artist, album, id])
 
-    //     .then(function (result) {
-    //         console.log("Update feedback item for id of", id);
-    //         // it worked!
-    //         res.send(result.rows);
-    //     })
-    //     .catch(function (error) {
-    //         console.log("Sorry, there was an error with your query: ", error);
-    //         res.sendStatus(500); // HTTP SERVER ERROR
-    //     });
+        .then(function (result) {
+            console.log("Update feedback item for id of", id);
+            // it worked!
+            res.send(result.rows);
+        })
+        .catch(function (error) {
+            console.log("Sorry, there was an error with your query: ", error);
+            res.sendStatus(500); // HTTP SERVER ERROR
+        });
 });
 
 
