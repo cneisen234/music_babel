@@ -24,6 +24,8 @@ class Recommendations extends Component {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
   addNewRecommendation = (event) => {
+    event.preventDefault();
+    
     //grabs all keys in Redux state
     const { username } = this.props.user;
     const { song, artist, album } = this.state 
@@ -68,6 +70,11 @@ class Recommendations extends Component {
       } else {
         swal("Your recommendations submission was canceled!");
       }
+    })
+    this.setState ({
+      song: "",
+      artist: "",
+      album: "",
     })
   };
   // React render function

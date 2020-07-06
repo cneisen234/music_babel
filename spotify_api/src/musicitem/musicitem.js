@@ -7,10 +7,11 @@ import axios from "axios";
 class MusicItem extends Component {
   //refreshes database info on load
   componentDidMount() {
-    // this.props.refreshFeedback();
+  
   }
   //deletes selected review
   deleteMusic = (event) => {
+    event.preventDefault();
     //sweet alerts!
     swal({
       title: "Are you sure?",
