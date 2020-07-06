@@ -8,6 +8,7 @@ import logger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 import axios from "axios";
 import { takeEvery, takeLatest, put } from "redux-saga/effects";
+import swal from "sweetalert"
 
 function* registerUser(action) {
   try {
@@ -47,6 +48,9 @@ function* loginUser(action) {
     // after the user has logged in
     // get the user information from the server
     yield put({ type: "FETCH_USER" });
+    swal(`welcome back! ${action.payload.username}`, {
+      icon: "success"
+    })
   } catch (error) {
     console.log("Error with user login:", error);
     if (error.response.status === 401) {
@@ -54,6 +58,9 @@ function* loginUser(action) {
       // if user isn't in the database or
       // if the username and password don't match in the database
       yield put({ type: "LOGIN_FAILED" });
+      swal("invalid login, please try again" , {
+        icon: "warning"
+      })
     } else {
       // Got an error that wasn't a 401
       // Could be anything, but most common cause is the server is not started

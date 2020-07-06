@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { TextField, Button, Paper } from "@material-ui/core";
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
+import swal from "sweetalert";
 import { nominalTypeHack } from "prop-types";
 //define class of new Spotify into spotifyWebApi
 const spotifyWebApi = new Spotify();
@@ -73,6 +74,10 @@ class Header extends Component {
         },
       });
       this.toggle();
+      swal(`welcome ${this.state.username} to Music Babel! 
+      Enjoy!`, {
+        icon: "success",
+      })
     } else {
       //failed registeration
       this.props.dispatch({ type: "REGISTRATION_INPUT_ERROR" });
@@ -91,6 +96,10 @@ class Header extends Component {
           password: this.state.password,
         },
       });
+      this.setState({
+        username: "",
+        password: "",
+      })
     } else {
       //error at login
       this.props.dispatch({ type: "LOGIN_INPUT_ERROR" });
@@ -102,6 +111,26 @@ class Header extends Component {
       [propertyName]: event.target.value,
     });
   };
+  
+  logout = () => {
+    swal({
+      title: "Confirm logout?",
+      text: "Click ok to confirm logout",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willLogout) => {
+        if (willLogout) {
+          this.props.dispatch({ type: "LOGOUT" })  
+          swal("Logout successful", {
+            icon: "success",
+          });
+        } else {
+          swal("Logout canceled");
+        }
+      });
+  }
   //toggles a true or false value when run, used to conditionally render
   toggle = () => {
     this.setState({
@@ -283,7 +312,7 @@ class Header extends Component {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => this.props.dispatch({ type: "LOGOUT" })}
+                onClick={this.logout}
               >
                 Log out
               </Button>
