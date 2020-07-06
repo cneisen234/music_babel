@@ -81,11 +81,12 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
 router.put("/:id", (req, res) => {
     let id = req.params.id; // grabs id and places it in path
     const music = req.body; // pull the object out out of the HTTP REQUEST
-    const { song, artist, album } = music
-    let queryText = `UPDATE recommendation SET song = $1, artist = $2, album = $3 WHERE  id = $4`;
+    const { username, song, artist, album } = music
+    console.log("username", username)
+    let queryText = `UPDATE recommendation SET song = $1, artist = $2, album = $3 WHERE  (username = $4 AND id = $5)`;
     //....and uopdates it with put to flagged
     pool
-        .query(queryText, [song, artist, album, id])
+        .query(queryText, [song, artist, album, username, id])
 
         .then(function (result) {
             console.log("Update feedback item for id of", id);
