@@ -126,8 +126,24 @@ function* fetchMusic() {
   }
 }
 
+function* deleteMusic(action) {
+  try {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    };
+    //with DELETE, does not need response
+    console.log(action.payload);
+    yield axios.delete(`/music/${action.payload}`, config);
+    yield put({ type: "FETCH_MUSIC" });
+  } catch (error) {
+    console.log("Error deleting recommendation:", error);
+  }
+}
+
 function* rootSaga() {
   yield takeEvery("FETCH_MUSIC", fetchMusic); //fetchMusic goes to FETCH_MUSIC
+  yield takeEvery("DELETE_MUSIC", deleteMusic); //fetchMusic goes to FETCH_MUSIC
     yield takeLatest("REGISTER", registerUser); //register goes to REGISTER
       yield takeLatest("LOGIN", loginUser); //loginUser goes to LOGIN
   yield takeLatest("LOGOUT", logoutUser); //logoutUser goes to LOGOUT

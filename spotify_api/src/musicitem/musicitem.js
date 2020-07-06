@@ -1,44 +1,49 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { TextField, Button, Paper } from "@material-ui/core";
+import swal from "sweetalert";
+import axios from "axios";
 
-class Adminitem extends Component {
+class MusicItem extends Component {
   //refreshes database info on load
   componentDidMount() {
     // this.props.refreshFeedback();
   }
   //deletes selected review
-//   deleteReview = (event) => {
-//     //sweet alerts!
-//     swal({
-//       title: "Are you sure?",
-//       text: "Once deleted, you will not be able to recover this review!",
-//       icon: "warning",
-//       buttons: true,
-//       dangerMode: true,
-//       //end sweet alerts
-//     }).then((willDelete) => {
-//       // start .then
-//       //if confirmed, delete
-//       if (willDelete) {
-//         axios({
-//           method: "DELETE",
-//           url: `/confirm/${this.props.admin.id}`,
-//           //grabs id of component that are interacting with
-//         }).then(function (response) {});
-//         //success! review deleted
-//         swal("Poof! Your review has been deleted!", {
-//           icon: "success",
-//         });
-//       } else {
-//         //...else cancel action
-//         swal("Your review is safe!");
-//       }
-//       //reloads page after 1.5 seconds of deletion to reflect update on admin page
-//       setTimeout(() => {
-//         window.location.reload();
-//       }, 1500);
-//     });
-//   }; //end deleteReview
+  deleteMusic = (event) => {
+    //sweet alerts!
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this recommendation!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+      //end sweet alerts
+    }).then((willDelete) => {
+      // start .then
+      //if confirmed, delete
+          if(willDelete) {
+            console.log("this.props.musicitem.id", this.props.musicitem.id)
+            axios({
+              method: "DELETE",
+              url: `/music/${this.props.musicitem.id}`,
+              //grabs id of component that are interacting with
+        })
+        .then(function (response) {});
+        //success! review deleted
+        swal("Poof! Your recommendation has been deleted!", {
+          icon: "success",
+        });
+      } else {
+        //...else cancel action
+        swal("Your recommendation is safe!");
+      }
+      //reloads page after 1.5 seconds of deletion to reflect update on recommendations page
+      setTimeout(() => {
+        window.location.reload(false);
+      }, 1500);
+    });
+  }; //end deleteReview
 
   //flags the current review with a PUT request
 //   flagForReview = (event) => {
@@ -92,6 +97,15 @@ class Adminitem extends Component {
         <td>{musicitem.song}</td>
         <td>{musicitem.artist}</td>
         <td>{musicitem.album}</td>
+        <td> <Button
+          onClick={this.deleteMusic}
+          className="feedbackButton"
+          variant="contained"
+          color="secondary"
+          type="delete"
+        >
+          Delete
+                </Button></td>
 
         {/* clickable event, runs flagForReview function */}
         {/* formats timestamp with moment */}
@@ -115,7 +129,10 @@ class Adminitem extends Component {
   } // end render
 } // end class Footer
 // pull props from Redux state
-const mapReduxStateToProps = (reduxState) => ({
-  reduxState,
+// redux state
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  user: state.user,
 });
-export default connect(mapReduxStateToProps)(Adminitem);
+
+export default connect(mapStateToProps)(MusicItem);

@@ -134,6 +134,7 @@ class Recommendations extends Component {
                 <th>Title</th>
                 <th>Artist</th>
                 <th>Album</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>

@@ -45,20 +45,36 @@ router.post("/", rejectUnauthenticated, (req, res) => {
 }); // end POST
 
 //DELETES entry from admin page
-router.delete('/:id', (req, res) => {
-    // let id = req.params.id; // id of the thing to delete
-    // console.log('Delete route called with id of', id);
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+    let id = req.params.id; // id of the thing to delete
 
-    // const queryText = `
-    // DELETE FROM feedback WHERE id=$1;` //deletes from database
-    // pool.query(queryText, [id])
-    //     .then(function (result) {
-    //         res.sendStatus(201); //status 201
-    //     }).catch(function (error) {
-    //         console.log('Sorry, there was an error with your query: ', error);
-    //         res.sendStatus(500); //HTTP SERVER ERROR
-
-    //     });
+    /* if (session.id !== database.id) {sendStatus(403) return;}*/
+    let queryText = `SELECT * FROM recommendation WHERE id=$1`; //grabs specific item to grab the item user_id
+    const queryValue = [id];
+    pool
+        .query(queryText, queryValue)
+        .then((result) => {
+            console.log("result.rows[0].username", result.rows[0].username)
+            console.log("req.username", req.user.username)
+            if (result.rows[0].username === req.user.username) {
+                //checks to see if current user is the one who added the image
+                queryText = `DELETE FROM recommendation WHERE id=$1;`; //deletes from database
+                pool
+                    .query(queryText, [id])
+                    .then(function (result) {
+                        res.sendStatus(201); //status 201
+                    })
+                    .catch(function (error) {
+                        console.log("Sorry, there was an error with your query: ", error);
+                        res.sendStatus(500); //HTTP SERVER ERROR
+                    });
+            } else {
+                res.sendStatus(401); // user not authorized to delete item
+            }
+        })
+        .catch((error) => {
+            res.sendStatus(500);
+        });
 }); //end DELETE
 
 //PUT to flag for review
