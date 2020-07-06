@@ -148,14 +148,14 @@ class Header extends Component {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
-          {this.state.toggle2 === false ? (
+          {this.state.toggle2 === false && this.props.user.username ? (
             <Paper
               style={{
                 right: 0,
                 top: 0,
                 position: "fixed",
                 borderRadius: "10%",
-                height: "350px",
+                height: "400px",
                 width: "400px",
                 fontSize: "15px",
               }}
@@ -217,10 +217,11 @@ class Header extends Component {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => this.props.dispatch({ type: "LOGOUT" })}
+                onClick={this.logout}
               >
                 Log out
               </Button>
+              
               <br />
               <Button
                 variant="contained"

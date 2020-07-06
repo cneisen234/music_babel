@@ -97,6 +97,7 @@
   font-size: calc(10px + 2vmin);
   color: white;
   z-index: -5;
+  font-family: 'Permanent Marker', cursive;
 }
 
 .App-link {
@@ -105,6 +106,7 @@
 
 div, button {
   margin: 15px;
+  font-family: 'Gloria Hallelujah', cursive;
 }
 
 div {

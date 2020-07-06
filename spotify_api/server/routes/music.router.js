@@ -18,30 +18,30 @@ router.get('/', (req, res) => {
 }) //end GET
 
 //POST the new feedback
-router.post("/", (req, res) => {
+router.post("/", rejectUnauthenticated, (req, res) => {
     // HTTP REQUEST BODY
-    // const feedback = req.body; // pull the object out out of the HTTP REQUEST
-    // const { name, feeling, understanding, support, comments, flagged } = feedback
-    // if (feedback === undefined) {
-    //     // stop, dont touch the database
-    //     res.sendStatus(400); // 400 BAD REQUEST
-    //     return;
-    // }
+    const music = req.body; // pull the object out out of the HTTP REQUEST
+    const { username, song, artist, album } = music
+    if (music === undefined) {
+        // stop, dont touch the database
+        res.sendStatus(400); // 400 BAD REQUEST
+        return;
+    }
 
-    // const queryText = `
-    //     INSERT INTO feedback (name, feeling, understanding, support, comments, flagged) 
-    //     VALUES ($1, $2, $3, $4, $5, $6);`; //grabs database
-    // pool
-    //     .query(queryText, [name, feeling, understanding, support, comments, false])
-    //     .then(function (result) {
-    //         // result.rows: 'INSERT 0 1';
-    //         // it worked!
-    //         res.sendStatus(200); // 200: OK
-    //     })
-    //     .catch(function (error) {
-    //         console.log("Sorry, there was an error with your query: ", error);
-    //         res.sendStatus(500); // HTTP SERVER ERROR
-    //     });
+    const queryText = `
+        INSERT INTO recommendation (username, song, artist, album) 
+        VALUES ($1, $2, $3, $4);`; //grabs database
+    pool
+        .query(queryText, [username, song, artist, album])
+        .then(function (result) {
+            // result.rows: 'INSERT 0 1';
+            // it worked!
+            res.sendStatus(200); // 200: OK
+        })
+        .catch(function (error) {
+            console.log("Sorry, there was an error with your query: ", error);
+            res.sendStatus(500); // HTTP SERVER ERROR
+        });
 }); // end POST
 
 //DELETES entry from admin page

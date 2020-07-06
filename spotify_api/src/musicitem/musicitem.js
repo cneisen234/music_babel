@@ -88,6 +88,7 @@ class Adminitem extends Component {
       // displays list of recommended songs from database
       <tr>
         {/* table data for each mapped item */}
+        <td>{musicitem.username}</td>
         <td>{musicitem.song}</td>
         <td>{musicitem.artist}</td>
         <td>{musicitem.album}</td>
