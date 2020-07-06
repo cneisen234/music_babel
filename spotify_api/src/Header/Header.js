@@ -211,6 +211,7 @@ class Header extends Component {
                 height: "50px",
                 width: "150px",
                 fontSize: "15px",
+                
               }}
               elevation="24"
               className="loginBox"
