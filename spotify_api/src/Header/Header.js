@@ -12,6 +12,7 @@ class Header extends Component {
   //local state for toggle and user inputs at login and registeration
   state = {
     toggle: false,
+    toggle2: false,
     username: "",
     password: "",
     background: "",
@@ -24,14 +25,14 @@ class Header extends Component {
     },
   };
   componentDidMount() {
-      //calls getNowPlaying on mount
-        this.getNowPlaying();
-      //selected a random photo class
+    //calls getNowPlaying on mount
+    this.getNowPlaying();
+    //selected a random photo class
     const randomPhoto = "photo" + Math.floor(Math.random() * 11);
     this.setState({
       background: randomPhoto,
     });
-      //reruns nowPlaying and forces an update every 20 seconds to keep current song displaying
+    //reruns nowPlaying and forces an update every 20 seconds to keep current song displaying
     setInterval(() => {
       this.getNowPlaying();
       this.forceUpdate();
@@ -107,28 +108,35 @@ class Header extends Component {
       toggle: !this.state.toggle,
     });
   };
+  //toggles a true or false value when run, used to conditionally render
+  toggle2 = () => {
+    this.setState({
+      toggle2: !this.state.toggle2,
+    });
+  };
   // React render function
   render() {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
-          <Paper
-            style={{
-              right: 0,
-              top: 0,
-              position: "fixed",
-              borderRadius: "10%",
-              height: "250px",
-              width: "400px",
-              fontSize: "15px",
-            }}
-            elevation="24"
-            className="loginBox"
-          >
-            {" "}
-            {/* user currently signed in */}
-            <p>Hello: {this.props.user.username}</p>
-            {/* populates with current playing info */}
+          {this.state.toggle2 === false ? (
+            <Paper
+              style={{
+                right: 0,
+                top: 0,
+                position: "fixed",
+                borderRadius: "10%",
+                height: "350px",
+                width: "400px",
+                fontSize: "15px",
+              }}
+              elevation="24"
+              className="loginBox"
+            >
+              {" "}
+              {/* user currently signed in */}
+              <p>Hello: {this.props.user.username}</p>
+              {/* populates with current playing info */}
               <div
                 style={{
                   textAlign: "center",
@@ -137,36 +145,88 @@ class Header extends Component {
                 Now Playing:{" "}
               </div>
               <table>
-                  <tr>
-                      <td>
-              <ul
-                style={{
-                  float: "left",
-                  listStyle: "none",
-                }}
+                <tr>
+                  <td>
+                    <ul
+                      style={{
+                        float: "left",
+                        listStyle: "none",
+                      }}
+                    >
+                      <li>
+                        <b>Track:</b> {this.state.nowPlaying.name}
+                      </li>
+                      <li>
+                        <b>Artist:</b> {this.state.nowPlaying.artist}
+                      </li>
+                      <li>
+                        <b>Album:</b> {this.state.nowPlaying.album}
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <div>
+                      <img
+                        style={{
+                          float: "right",
+                        }}
+                        src={this.state.nowPlaying.image}
+                        alt="album art"
+                        style={{ width: 100 }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              {/* button to log in with spotify, takes you to spotify web api server used for log in */}
+              <a href="http://localhost:8888">
+                <Button variant="contained" color="secondary">
+                  Link to Spotify
+                </Button>
+              </a>
+              {/* logout */}
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => this.props.dispatch({ type: "LOGOUT" })}
               >
-                <li>Track: {this.state.nowPlaying.name}</li>
-                <li>Artist: {this.state.nowPlaying.artist}</li>
-                <li>Album: {this.state.nowPlaying.album}</li>
-              </ul>
-              </td>
-            <td>
-            <div>
-              <img
-                style={{
-                  float: "right",
-                }}
-                src={this.state.nowPlaying.image}
-                alt="album art"
-                style={{ width: 100 }}
-              />
-            </div>
-            </td>
-            </tr>
-            </table>
-          </Paper>
+                Log out
+              </Button>
+              <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.toggle2}
+              >
+                toggle window
+              </Button>
+            </Paper>
+          ) : (
+            <Paper
+              style={{
+                right: 0,
+                top: 0,
+                position: "fixed",
+                borderRadius: "10%",
+                height: "50px",
+                width: "150px",
+                fontSize: "15px",
+              }}
+              elevation="24"
+              className="loginBox"
+            >
+              {" "}
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.toggle2}
+              >
+                toggle window
+              </Button>
+            </Paper>
+          )}
           <h1 className="App-title">Music Babel</h1>
-          <h3 className="App-title">You're place for music community</h3>
+          <h3 className="App-title">Your place for music community</h3>
           {/* if toggle is false show the login page */}
           {this.state.toggle === false ? (
             <>
@@ -212,6 +272,12 @@ class Header extends Component {
               >
                 Create New Account
               </Button>
+              {/* button to log in with spotify, takes you to spotify web api server used for log in */}
+              <a href="http://localhost:8888">
+                <Button variant="contained" color="secondary">
+                  Link to Spotify
+                </Button>
+              </a>
               {/* logout */}
               <Button
                 variant="contained"

@@ -202,10 +202,6 @@ class RandomSong extends Component {
     return (
       <div className="App">
         <h1>RANDOM SONG</h1>
-        {/* button to log in with spotify, takes you to spotify web api server used for log in */}
-        <a href="http://localhost:8888">
-          <button>Login With Spotify</button>
-        </a>
         {/* generates random song */}
         <button onClick={() => this.randomSong()}>Generate Random Song</button>
         <div>Artist: {this.state.randomSong.artist}</div>
