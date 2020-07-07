@@ -12,6 +12,7 @@ class MusicItem extends Component {
     artist: "",
     album: "",
     toggle: false,
+    toggle2: false,
     rate: null
   }
   //refreshes database info on load
@@ -130,12 +131,13 @@ class MusicItem extends Component {
           method: "POST",
           url: "/music/rate",
           data: {
-            id: id,
+            id: id[0],
             rate: rate,
           }
           //data from Redux state to POST
         }) //end axios
           .then((response) => {// start .then
+            this.toggle2();
             this.props.dispatch({ type: "FETCH_MUSIC" });
           }) //end .then
           .catch((error) => { //start .catchError
@@ -168,9 +170,15 @@ class MusicItem extends Component {
       toggle: !this.state.toggle,
     });
   };
+  toggle2 = () => {
+    this.setState({
+      toggle2: !this.state.toggle2,
+    });
+  };
   render() {
     // grabs admin parem from map of parent
     const { musicitem } = this.props;
+    const { rate } = this.props.musicitem
     return (
       // displays list of recommended songs from database
       <tr>
@@ -179,7 +187,21 @@ class MusicItem extends Component {
         <td>{musicitem.song}</td>
         <td>{musicitem.artist}</td>
         <td>{musicitem.album}</td>
-        <td><form onSubmit={this.rate}>
+        <td>{!this.state.toggle2 ? (
+          <>
+          <p>{Math.round(rate*100)/100}</p>
+          <Button
+            onClick={this.toggle2}
+            className="feedbackButton"
+            variant="contained"
+            color="secondary"
+            type="delete"
+          >
+            Rate
+                </Button>
+                </>
+        ) : (
+        <form onSubmit={this.rate}>
           <Select
             variant="outlined"
             required
@@ -204,8 +226,9 @@ class MusicItem extends Component {
             Rate
                 </Button>
                 </form>
+        )}
           </td>
-       {this.props.user.username === musicitem.username ? (
+       {this.props.user.username == musicitem.username ? (
                   <>
         <td> <Button
           onClick={this.deleteMusic}

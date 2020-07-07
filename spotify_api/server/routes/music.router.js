@@ -9,7 +9,7 @@ const userStrategy = require("../strategies/user.strategy");
 
 //GET all recommendations
 router.get('/', (req, res) => {
-    pool.query('SELECT * from "recommendation";').then((result) => {
+    pool.query('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, AVG(rate) as rate from "recommendation" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" GROUP BY recommendation.id;').then((result) => {
         res.send(result.rows);
     }).catch((error) => {
         console.log('Error GET /recommendations', error)
