@@ -127,6 +127,8 @@ class MusicItem extends Component {
         <td>{musicitem.song}</td>
         <td>{musicitem.artist}</td>
         <td>{musicitem.album}</td>
+       {this.props.user.username === musicitem.username ? (
+                  <>
         <td> <Button
           onClick={this.deleteMusic}
           className="feedbackButton"
@@ -145,6 +147,11 @@ class MusicItem extends Component {
         >
           Edit
                 </Button></td>
+                </>
+       ) : (
+         <span></span>
+)}
+
                 {this.state.toggle === false ? (
                   <span></span>
                 ) : (
