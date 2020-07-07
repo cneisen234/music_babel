@@ -84,7 +84,7 @@ table{
 /*table styles and colors*/
 /*sets the opposite background color for tds*/
 td {
-     background-color: #033076;
+     background-color: black;
   color: white;
   margin-left: 3%;
   padding: 10px;

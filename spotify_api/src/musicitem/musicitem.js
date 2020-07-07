@@ -273,7 +273,7 @@ class MusicItem extends Component {
                 ) : (
             <Paper
               style={{
-                right: 0,
+                left: 0,
                 bottom: 0,
                 position: "fixed",
                 borderRadius: "10%",
@@ -281,6 +281,7 @@ class MusicItem extends Component {
                 width: "400px",
                 fontSize: "15px",
                 backgroundColor: "white",
+                zIndex: Infinity,
               }}
               elevation="24"
               className="loginBox"
