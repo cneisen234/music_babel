@@ -83,6 +83,7 @@ table{
     margin-top: 20px;
     border: solid black;
     border-radius: 15px;
+    width: 100%;
 }
 /*table styles and colors*/
 td {
@@ -96,16 +97,18 @@ td {
   /*info box for each item defaults to display: none;*/
   display: none;
 }
-
+.rating {
+  float: left;
+}
 .rating:hover + .info {
   /*on hover, show info box*/
-      display: block;
+  float: right;
+      display: inline-flex;
     background-color: blue;
     color: white;
     position: absolute;
-    height: 10%;
-    width: 8%;
-    min-height: 150px;
+    height: 5%;
+    width: 30%;
     min-width: 80px;
     border-radius: 5%;
     border-width: 1px;

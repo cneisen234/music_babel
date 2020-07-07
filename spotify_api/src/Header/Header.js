@@ -138,7 +138,11 @@ class Header extends Component {
               {/* login form */}
               <form onSubmit={this.login}>
                 {/* username */}
-                <TextField
+                      <Paper style={{
+                        height: "5%",
+                        width: "100%",
+                        borderRadius: 20,
+                      }} elevation="24"><TextField
                   className="input"
                   type="text"
                   required
@@ -158,7 +162,7 @@ class Header extends Component {
                   name="password"
                   value={this.state.password}
                   onChange={this.handleInputChangeFor("password")}
-                />
+                /></Paper>
                 <br />
                 {/* login */}
                 <Button

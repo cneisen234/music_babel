@@ -180,7 +180,7 @@ class App extends Component {
                 Log out
               </Button>
 
-              <br />
+              <br /><br /><br /><br />
               {/* toggles window to make it appear or disappear */}
               <Button
                 variant="contained"
@@ -195,7 +195,7 @@ class App extends Component {
               <Paper
                 style={{
                   right: 0,
-                  top: 0,
+                  bottom: 0,
                   position: "fixed",
                   borderRadius: "10%",
                   height: "50px",
