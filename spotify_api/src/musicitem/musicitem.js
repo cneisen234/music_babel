@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
+import GradeIcon from '@material-ui/icons/Grade';
+import EditIcon from '@material-ui/icons/Edit';
+import Rating from '@material-ui/lab/Rating';
 import swal from "sweetalert";
 import axios from "axios";
 
@@ -137,7 +141,6 @@ class MusicItem extends Component {
           //data from Redux state to POST
         }) //end axios
           .then((response) => {// start .then
-            this.toggle2();
             this.props.dispatch({ type: "FETCH_MUSIC" });
           }) //end .then
           .catch((error) => { //start .catchError
@@ -151,6 +154,7 @@ class MusicItem extends Component {
       } else {
         swal("Your rating submission was canceled!");
       }
+      this.toggle2();
     })
     this.setState({
     rate: null
@@ -178,31 +182,39 @@ class MusicItem extends Component {
   render() {
     // grabs admin parem from map of parent
     const { musicitem } = this.props;
-    const { rate } = this.props.musicitem
+    let rate = this.props.musicitem.rate
+    rate = Math.round(rate * 100) / 100
     return (
       // displays list of recommended songs from database
+      <table>
       <tr>
         {/* table data for each mapped item */}
-        <td>{musicitem.username}</td>
-        <td>{musicitem.song}</td>
-        <td>{musicitem.artist}</td>
-        <td>{musicitem.album}</td>
+        <td><b>Posted by:</b><br /> {musicitem.username}</td>
+        <td><b>Title:</b><br />{musicitem.song}</td>
+        <td><b>Artist:</b><br />{musicitem.artist}</td>
+        <td><b>Album:</b><br />{musicitem.album}</td>
+        </tr>
+        <tr>
+        {this.props.user.username ? (
         <td>{!this.state.toggle2 ? (
           <>
-          <p>{Math.round(rate*100)/100}</p>
-          <Button
-            onClick={this.toggle2}
-            className="feedbackButton"
-            variant="contained"
-            color="secondary"
-            type="delete"
-          >
-            Rate
-                </Button>
+            <div className="rating" onClick={this.toggle2}><b>Average Rating:</b><Rating
+              size="small"
+              readOnly
+              value={rate}
+              precision={0.1}
+              max={5}
+            /></div>
+            <div className="info">
+              Click here to vote on {musicitem.song}
+            </div>
                 </>
         ) : (
         <form onSubmit={this.rate}>
           <Select
+            style= {{
+              backgroundColor: "white",
+            }}
             variant="outlined"
             required
             name="rate"
@@ -211,11 +223,11 @@ class MusicItem extends Component {
             onChange={(event) => this.handleChange(event, "rate")} //sends input values to local state
           >
             {/* select items 1 - 5 */}
-            <MenuItem value="5">5</MenuItem>
-            <MenuItem value="4">4</MenuItem>
-            <MenuItem value="3">3</MenuItem>
-            <MenuItem value="2">2</MenuItem>
-            <MenuItem value="1">1</MenuItem>
+            <MenuItem value="5"><Rating value={5} readOnly size="small"/></MenuItem>
+            <MenuItem value="4"><Rating value={4} readOnly size="small"/></MenuItem>
+            <MenuItem value="3"><Rating value={3} readOnly size="small"/></MenuItem>
+            <MenuItem value="2"><Rating value={2} readOnly size="small"/></MenuItem>
+            <MenuItem value="1"><Rating value={1} readOnly size="small" /></MenuItem>
           </Select>
           <Button
             className="feedbackButton"
@@ -223,11 +235,14 @@ class MusicItem extends Component {
             color="secondary"
             type="delete"
           >
-            Rate
+                    <GradeIcon />
                 </Button>
                 </form>
         )}
           </td>
+        ) : (
+          <span></span>
+        )}
        {this.props.user.username == musicitem.username ? (
                   <>
         <td> <Button
@@ -237,7 +252,7 @@ class MusicItem extends Component {
           color="secondary"
           type="delete"
         >
-          Delete
+          <DeleteIcon />
                 </Button></td>
         <td><Button
           onClick={this.toggle}
@@ -246,7 +261,7 @@ class MusicItem extends Component {
           color="secondary"
           type="delete"
         >
-          Edit
+                <EditIcon />
                 </Button></td>
                 </>
        ) : (
@@ -265,10 +280,13 @@ class MusicItem extends Component {
                 height: "400px",
                 width: "400px",
                 fontSize: "15px",
+                backgroundColor: "white",
               }}
               elevation="24"
               className="loginBox"
-            ><td> <form onSubmit={this.editReview}>
+              ><td style={{
+                backgroundColor: "white",
+              }}> <form onSubmit={this.editReview}>
           <TextField
             variant="outlined"
             required
@@ -324,24 +342,8 @@ class MusicItem extends Component {
             </Button></td></Paper>
                 )}
 
-        {/* clickable event, runs flagForReview function */}
-        {/* formats timestamp with moment */}
-        {/* <td>{moment(admin.date).format("MMMM Do YYYY")}</td>
-        <td> */}
-          {
-            //delete button, runs deleteReview function on click
-            // <Button
-            //   onClick={this.deleteReview}
-            //   className="feedbackButton"
-            //   variant="contained"
-            //   color="secondary"
-            //   type="delete"
-            // >
-            //   Delete
-            // </Button>
-          }
-        {/* </td> */}
       </tr>
+      </table>
     ); // end return
   } // end render
 } // end class Footer

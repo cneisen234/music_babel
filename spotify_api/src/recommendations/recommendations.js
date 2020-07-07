@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { TextField, Button, Paper } from "@material-ui/core";
+import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
 import MusicItem from "../musicitem/musicitem"
 import swal from "sweetalert";
 import axios from "axios";
 
 class Recommendations extends Component {
   state = {
+      id: null,
       username: "",
       song: "",
       artist: "",
       album: "",
+      rate: null,
   }
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_MUSIC" });
@@ -83,7 +85,6 @@ class Recommendations extends Component {
   render() {
     return (
       <div className="App">
-        <h1>RECOMMENDATIONS</h1>
         {/* onSubmit run submitInfo function */}
         {!this.props.user.username ? ( 
         <span></span>
@@ -99,7 +100,7 @@ class Recommendations extends Component {
             type="text"
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "song")} //onChange of input values set local state
-          />
+          /><br />
           <TextField
             variant="outlined"
             required
@@ -110,7 +111,7 @@ class Recommendations extends Component {
             type="text"
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "artist")} //onChange of input values set local state
-          />
+          /><br />
           <TextField
             variant="outlined"
             required
@@ -135,34 +136,12 @@ class Recommendations extends Component {
         </form>
         )}
         <div>
-          <table id="musicTable">
-            <thead>
-              <tr>
-                {/* table headers for recommendation display */}
-                <th>Username</th>
-                <th>Title</th>
-                <th>Artist</th>
-                <th>Album</th>
-                {this.props.user.username ? (
-                  <>
-                  <th>Rate</th>
-                <th>Delete</th>
-                <th>Edit</th>
-                </>
-                ) : (
-                  <span></span>
-                )}
-              </tr>
-            </thead>
-            <tbody>
               {/* map through entire data query */}
               {this.props.music.map((musicitem) => {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
                 return <MusicItem key={musicitem.id} musicitem={musicitem} />;
               })}
-            </tbody>
-          </table>
         </div>
       </div>
     ); //end return

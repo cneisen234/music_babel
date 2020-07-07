@@ -74,6 +74,42 @@
   background-size: cover;
   z-index: -5;
 } 
+table{
+  margin-left:auto; 
+    margin-right:auto;
+    margin-top: 20px;
+    border: solid black;
+    border-radius: 15px;
+}
+/*table styles and colors*/
+/*sets the opposite background color for tds*/
+td {
+     background-color: #033076;
+  color: white;
+  margin-left: 3%;
+  padding: 10px;
+  border-radius: 15px;
+}
+.info {
+  /*info box for each item defaults to display: none;*/
+  display: none;
+}
+
+.rating:hover + .info {
+      display: block;
+    background-color: blue;
+    color: white;
+    position: absolute;
+    height: 10%;
+    width: 8%;
+    min-height: 150px;
+    min-width: 80px;
+    border-radius: 5%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white; 
+    padding: 10px;
+}
                
 .App-title {
   background-color: black;

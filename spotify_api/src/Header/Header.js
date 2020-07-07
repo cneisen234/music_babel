@@ -4,7 +4,6 @@ import { TextField, Button, Paper } from "@material-ui/core";
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
-import { nominalTypeHack } from "prop-types";
 //define class of new Spotify into spotifyWebApi
 const spotifyWebApi = new Spotify();
 
@@ -13,50 +12,15 @@ class Header extends Component {
   //local state for toggle and user inputs at login and registeration
   state = {
     toggle: false,
-    toggle2: false,
     username: "",
     password: "",
     background: "",
-    nowPlaying: {
-      name: "",
-      artist: "",
-      album: "",
-      image:
-        "https://image.shutterstock.com/image-vector/music-note-icon-vector-260nw-415866139.jpg",
-    },
   };
   componentDidMount() {
-    //calls getNowPlaying on mount
-    this.getNowPlaying();
     //selected a random photo class
     const randomPhoto = "photo" + Math.floor(Math.random() * 11);
     this.setState({
       background: randomPhoto,
-    });
-    //reruns nowPlaying and forces an update every 20 seconds to keep current song displaying
-    setInterval(() => {
-      this.getNowPlaying();
-      this.forceUpdate();
-      console.log("force rerender");
-    }, 20000);
-  }
-  getNowPlaying() {
-    //web api function used for playback
-    spotifyWebApi.getMyCurrentPlaybackState().then((response) => {
-      console.log("getNowPlaying", response);
-      //if response is undefined, return. Gaurds against errors if nothing is playing.
-      if (!response) {
-        return;
-      }
-      //set state with response
-      this.setState({
-        nowPlaying: {
-          name: response.item.name,
-          artist: response.item.artists[0].name,
-          album: response.item.album.name,
-          image: response.item.album.images[0].url,
-        },
-      });
     });
   }
   //function that registers user
@@ -137,133 +101,34 @@ class Header extends Component {
       toggle: !this.state.toggle,
     });
   };
-  //toggles a true or false value when run, used to conditionally render
-  toggle2 = () => {
-    this.setState({
-      toggle2: !this.state.toggle2,
-    });
-  };
+
   // React render function
   render() {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
-          {this.props.user.username ? (
-            <>
-          {this.state.toggle2 === false ? (
-            <Paper
-              style={{
-                right: 0,
-                top: 0,
-                position: "fixed",
-                borderRadius: "10%",
-                height: "400px",
-                width: "400px",
-                fontSize: "15px",
-              }}
-              elevation="24"
-              className="loginBox"
-            >
-              {" "}
-              {/* user currently signed in */}
-              <p>Hello: {this.props.user.username}</p>
-              {/* populates with current playing info */}
-              <div
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                Now Playing:{" "}
-              </div>
-              <table>
-                <tr>
-                  <td>
-                    <ul
-                      style={{
-                        float: "left",
-                        listStyle: "none",
-                      }}
-                    >
-                      <li>
-                        <b>Track:</b> {this.state.nowPlaying.name}
-                      </li>
-                      <li>
-                        <b>Artist:</b> {this.state.nowPlaying.artist}
-                      </li>
-                      <li>
-                        <b>Album:</b> {this.state.nowPlaying.album}
-                      </li>
-                    </ul>
-                  </td>
-                  <td>
-                    <div>
-                      <img
-                        style={{
-                          float: "right",
-                        }}
-                        src={this.state.nowPlaying.image}
-                        alt="album art"
-                        style={{ width: 100 }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              </table>
-              {/* button to log in with spotify, takes you to spotify web api server used for log in */}
-              <a href="http://localhost:8888">
-                <Button variant="contained" color="secondary">
-                  Link to Spotify
-                </Button>
-              </a>
-              {/* logout */}
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={this.logout}
-              >
-                Log out
-              </Button>
-              
-              <br />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={this.toggle2}
-              >
-                toggle window
-              </Button>
-            </Paper>
-          ) : (
-            <Paper
-              style={{
-                right: 0,
-                top: 0,
-                position: "fixed",
-                borderRadius: "10%",
-                height: "50px",
-                width: "150px",
-                fontSize: "15px",
-                
-              }}
-              elevation="24"
-              className="loginBox"
-            >
-              {" "}
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={this.toggle2}
-              >
-                toggle window
-              </Button>
-            </Paper>
-          )}
-          </>
-          ) : (
-            <span></span>
-          )}
+     
           <h1 className="App-title">Music Babel</h1>
           <h3 className="App-title">Your place for music community</h3>
+          {/* button to log in with spotify, takes you to spotify web api server used for log in */}
+          {this.props.user.username ? (
+            <>
+          <a href="http://localhost:8888">
+            <Button variant="contained" color="secondary">
+              Link to Spotify
+                </Button>
+          </a>
+          {/* logout */}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this.logout}
+          >
+            Log out
+              </Button>
+              </>
+          ) : (
+            <>
           {/* if toggle is false show the login page */}
           {this.state.toggle === false ? (
             <>
@@ -309,20 +174,7 @@ class Header extends Component {
               >
                 Create New Account
               </Button>
-              {/* button to log in with spotify, takes you to spotify web api server used for log in */}
-              <a href="http://localhost:8888">
-                <Button variant="contained" color="secondary">
-                  Link to Spotify
-                </Button>
-              </a>
-              {/* logout */}
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={this.logout}
-              >
-                Log out
-              </Button>
+        
             </>
           ) : (
             // if toggle is true, load registeration page
@@ -379,6 +231,8 @@ class Header extends Component {
                 go back to login
               </Button>
             </>
+          )}
+          </>
           )}
         </header>
         <br />
