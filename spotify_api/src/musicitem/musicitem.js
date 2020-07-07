@@ -112,7 +112,11 @@ class MusicItem extends Component {
   }; //end handleChange
   
   toggle = () => {
+    const { musicitem } = this.props;
     this.setState({
+      song: musicitem.song,
+      artist: musicitem.artist,
+      album: musicitem.album,
       toggle: !this.state.toggle,
     });
   };
@@ -211,7 +215,16 @@ class MusicItem extends Component {
           >
             Edit recommendation
             </Button>
-        </form></td></Paper>
+        </form>
+                <Button
+                  onClick={this.toggle}
+                  className="recommendationButton"
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                >
+                  Go Back
+            </Button></td></Paper>
                 )}
 
         {/* clickable event, runs flagForReview function */}

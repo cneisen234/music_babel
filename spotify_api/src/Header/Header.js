@@ -148,7 +148,9 @@ class Header extends Component {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
-          {this.state.toggle2 === false && this.props.user.username ? (
+          {this.props.user.username ? (
+            <>
+          {this.state.toggle2 === false ? (
             <Paper
               style={{
                 right: 0,
@@ -255,6 +257,10 @@ class Header extends Component {
                 toggle window
               </Button>
             </Paper>
+          )}
+          </>
+          ) : (
+            <span></span>
           )}
           <h1 className="App-title">Music Babel</h1>
           <h3 className="App-title">Your place for music community</h3>
