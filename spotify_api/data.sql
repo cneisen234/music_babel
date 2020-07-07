@@ -27,3 +27,14 @@ INSERT INTO "recommendation"
     ("song", "artist", "album")
 VALUES
     ('Settle', 'Two Door Cinema Club', 'Beacon');
+
+    --to create comment table
+CREATE TABLE "comment"
+(
+    "id" serial primary key,
+    "comment_id" INT REFERENCES "recommendation",
+    "comments" TEXT,
+    "rate" INT,
+    "created_at" TIMESTAMP,
+    "updated_at" TIMESTAMP
+); 

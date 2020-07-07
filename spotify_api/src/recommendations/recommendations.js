@@ -145,6 +145,7 @@ class Recommendations extends Component {
                 <th>Album</th>
                 {this.props.user.username ? (
                   <>
+                  <th>Rate</th>
                 <th>Delete</th>
                 <th>Edit</th>
                 </>

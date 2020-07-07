@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { TextField, Button, Paper } from "@material-ui/core";
+import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
 import swal from "sweetalert";
 import axios from "axios";
 
 class MusicItem extends Component {
   state = {
+    id: null,
     username: "",
     song: "",
     artist: "",
     album: "",
     toggle: false,
+    rate: null
   }
   //refreshes database info on load
   componentDidMount() {
@@ -106,6 +108,52 @@ class MusicItem extends Component {
       }, 1500);
     });
   };
+  rate = (event) => {
+    event.preventDefault();
+
+    //grabs all keys in Redux state
+    const { id, song } = this.props.musicitem;
+    const { rate } = this.state
+    //sweet alerts
+    swal({
+      //confirmation page exists in sweet alerts notification
+      title: "Confirm your recommendation",
+      text: `Give ${song} a rating of ${rate}?
+        click "ok" to confirm`,
+      icon: "info",
+      buttons: true,
+      dangerMode: true,
+      //end sweet alerts
+    }).then((confirm) => {//start .then
+      if (confirm) {
+        axios({ //start axios
+          method: "POST",
+          url: "/music/rate",
+          data: {
+            id: id,
+            rate: rate,
+          }
+          //data from Redux state to POST
+        }) //end axios
+          .then((response) => {// start .then
+            this.props.dispatch({ type: "FETCH_MUSIC" });
+          }) //end .then
+          .catch((error) => { //start .catchError
+            console.log(error);
+          }); //end .catchError
+        //success! Info POSTED to database
+        swal("Thank you for your rating!", {
+          icon: "success",
+        });
+        //...else canceled
+      } else {
+        swal("Your rating submission was canceled!");
+      }
+    })
+    this.setState({
+    rate: null
+    })
+  };
 
   handleChange = (event, fieldName) => {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
@@ -131,6 +179,32 @@ class MusicItem extends Component {
         <td>{musicitem.song}</td>
         <td>{musicitem.artist}</td>
         <td>{musicitem.album}</td>
+        <td><form onSubmit={this.rate}>
+          <Select
+            variant="outlined"
+            required
+            name="rate"
+            //sets value of input to value of local state
+            value={this.state.rate}
+            onChange={(event) => this.handleChange(event, "rate")} //sends input values to local state
+          >
+            {/* select items 1 - 5 */}
+            <MenuItem value="5">5</MenuItem>
+            <MenuItem value="4">4</MenuItem>
+            <MenuItem value="3">3</MenuItem>
+            <MenuItem value="2">2</MenuItem>
+            <MenuItem value="1">1</MenuItem>
+          </Select>
+          <Button
+            className="feedbackButton"
+            variant="contained"
+            color="secondary"
+            type="delete"
+          >
+            Rate
+                </Button>
+                </form>
+          </td>
        {this.props.user.username === musicitem.username ? (
                   <>
         <td> <Button

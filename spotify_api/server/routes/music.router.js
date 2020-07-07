@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     });
 }) //end GET
 
-//POST the new feedback
+//POST the new recommendation
 router.post("/", rejectUnauthenticated, (req, res) => {
     // HTTP REQUEST BODY
     const music = req.body; // pull the object out out of the HTTP REQUEST
@@ -33,6 +33,33 @@ router.post("/", rejectUnauthenticated, (req, res) => {
         VALUES ($1, $2, $3, $4);`; //grabs database
     pool
         .query(queryText, [username, song, artist, album])
+        .then(function (result) {
+            // result.rows: 'INSERT 0 1';
+            // it worked!
+            res.sendStatus(200); // 200: OK
+        })
+        .catch(function (error) {
+            console.log("Sorry, there was an error with your query: ", error);
+            res.sendStatus(500); // HTTP SERVER ERROR
+        });
+}); // end POST
+
+//POST a new rating
+router.post("/rate", rejectUnauthenticated, (req, res) => {
+    // HTTP REQUEST BODY
+    const music = req.body; // pull the object out out of the HTTP REQUEST
+    const { id, rate } = music
+    if (music === undefined) {
+        // stop, dont touch the database
+        res.sendStatus(400); // 400 BAD REQUEST
+        return;
+    }
+
+    const queryText = `
+        INSERT INTO comment (comment_id, rate) 
+        VALUES ($1, $2);`; //grabs database
+    pool
+        .query(queryText, [id, rate])
         .then(function (result) {
             // result.rows: 'INSERT 0 1';
             // it worked!
@@ -78,7 +105,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
 }); //end DELETE
 
 //PUT to flag for review
-router.put("/:id", (req, res) => {
+router.put("/:id", rejectUnauthenticated, (req, res) => {
     let id = req.params.id; // grabs id and places it in path
     const music = req.body; // pull the object out out of the HTTP REQUEST
     const { username, song, artist, album } = music
