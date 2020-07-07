@@ -19,10 +19,6 @@ class MusicItem extends Component {
     toggle2: false,
     rate: null
   }
-  //refreshes database info on load
-  componentDidMount() {
-  
-  }
   //deletes selected review
   deleteMusic = (event) => {
     event.preventDefault();
@@ -42,7 +38,7 @@ class MusicItem extends Component {
             axios({
               method: "DELETE",
               url: `/music/${this.props.musicitem.id}`,
-              //grabs id of component that are interacting with
+              //grabs id of component that we are interacting with
         })
         .then(function (response) {});
         //success! review deleted
@@ -60,13 +56,13 @@ class MusicItem extends Component {
     });
   }; //end deleteReview
 
-  //flags the current review with a PUT request
-  editReview = (event) => {
+  //edits current song with a PUT request
+  editRecommendation = (event) => {
     //prevents default action
     event.preventDefault();
-    //sweet alerts
     const { username } = this.props.user;
     const { song, artist, album } = this.state 
+    //sweet alerts
     swal({
       title: "Save changes?",
       text: `${ this.props.user.username }'s recommendation:
@@ -99,7 +95,7 @@ class MusicItem extends Component {
             //start .catchError
             console.log(error);
           }); //end .catchError
-        //success! Review flagged
+          //saved edited changes
         swal("Your changes have been saved!", {
           icon: "success",
         });
@@ -114,6 +110,7 @@ class MusicItem extends Component {
     });
   };
   rate = (event) => {
+    //prevents default action
     event.preventDefault();
 
     //grabs all keys in Redux state
@@ -138,7 +135,7 @@ class MusicItem extends Component {
             id: id[0],
             rate: rate,
           }
-          //data from Redux state to POST
+          //data from local state to POST
         }) //end axios
           .then((response) => {// start .then
             this.props.dispatch({ type: "FETCH_MUSIC" });
@@ -154,8 +151,10 @@ class MusicItem extends Component {
       } else {
         swal("Your rating submission was canceled!");
       }
+      //runs toggle2 to switchback to main view window on submission, switches back also at cancel
       this.toggle2();
     })
+    //resets local state
     this.setState({
     rate: null
     })
@@ -164,7 +163,7 @@ class MusicItem extends Component {
   handleChange = (event, fieldName) => {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
-  
+  //toggles and sets input fields to value on clicked recommendation
   toggle = () => {
     const { musicitem } = this.props;
     this.setState({
@@ -174,6 +173,7 @@ class MusicItem extends Component {
       toggle: !this.state.toggle,
     });
   };
+  //toggle2 for switching back and forth from rating and mainscreen
   toggle2 = () => {
     this.setState({
       toggle2: !this.state.toggle2,
@@ -195,7 +195,9 @@ class MusicItem extends Component {
         <td><b>Album:</b><br />{musicitem.album}</td>
         </tr>
         <tr>
+          {/* checked is user is logged in, rating, edit and delete only appear if user is logged in */}
         {this.props.user.username ? (
+          // if toggle2 is false then render mainscreen
         <td>{!this.state.toggle2 ? (
           <>
             <div className="rating" onClick={this.toggle2}><b>Average Rating:</b><Rating
@@ -210,6 +212,7 @@ class MusicItem extends Component {
             </div>
                 </>
         ) : (
+          //...else render voting screen
         <form onSubmit={this.rate}>
           <Select
             style= {{
@@ -229,6 +232,7 @@ class MusicItem extends Component {
             <MenuItem value="2"><Rating value={2} readOnly size="small"/></MenuItem>
             <MenuItem value="1"><Rating value={1} readOnly size="small" /></MenuItem>
           </Select>
+          {/* submit rating and saves to database, value of AVG is collective of all votes for that song */}
           <Button
             className="feedbackButton"
             variant="contained"
@@ -241,22 +245,25 @@ class MusicItem extends Component {
         )}
           </td>
         ) : (
+          //...if user is not logged in, render nothing
           <span></span>
         )}
+        {/* is the logged in user the one who posted recommendation? If so, display options to edit and delete */}
        {this.props.user.username == musicitem.username ? (
                   <>
-        <td> <Button
+        <td> 
+          {/* onclick, delete */}
+          <Button
           onClick={this.deleteMusic}
-          className="feedbackButton"
           variant="contained"
           color="secondary"
           type="delete"
         >
           <DeleteIcon />
                 </Button></td>
+                {/* toggles edit box on click for that song */}
         <td><Button
           onClick={this.toggle}
-          className="feedbackButton"
           variant="contained"
           color="secondary"
           type="delete"
@@ -265,12 +272,15 @@ class MusicItem extends Component {
                 </Button></td>
                 </>
        ) : (
+         //...if user is not the one who made the recommendation, don't render delete or edit
          <span></span>
 )}
-
+            {/* toggles edit window */}
                 {this.state.toggle === false ? (
+                  //if toggle is false, render nothing. This is the default
                   <span></span>
                 ) : (
+                  //...else render the edit screen for the selected song
             <Paper
               style={{
                 left: 0,
@@ -287,7 +297,8 @@ class MusicItem extends Component {
               className="loginBox"
               ><td style={{
                 backgroundColor: "white",
-              }}> <form onSubmit={this.editReview}>
+              }}> <form onSubmit={this.editRecommendation}>
+                {/* song */}
           <TextField
             variant="outlined"
             required
@@ -299,6 +310,7 @@ class MusicItem extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "song")} //onChange of input values set local state
           />
+          {/* artist */}
           <TextField
             variant="outlined"
             required
@@ -310,6 +322,7 @@ class MusicItem extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "artist")} //onChange of input values set local state
           />
+          {/* album */}
           <TextField
             variant="outlined"
             required

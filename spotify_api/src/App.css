@@ -1,6 +1,8 @@
 .App {
+  /*default text for all of App to center*/
   text-align: center;
 }
+/*all photos of random background*/
 .photo0 {
   background-image: url("https://img.pngio.com/cool-music-backgrounds-30-background-pictures-cool-musical-backgrounds-png-650_650.jpg");
     background-repeat: no-repeat;
@@ -74,6 +76,7 @@
   background-size: cover;
   z-index: -5;
 } 
+/*styles for all tables, used mainly for the recommendations layout*/
 table{
   margin-left:auto; 
     margin-right:auto;
@@ -82,7 +85,6 @@ table{
     border-radius: 15px;
 }
 /*table styles and colors*/
-/*sets the opposite background color for tds*/
 td {
      background-color: black;
   color: white;
@@ -96,6 +98,7 @@ td {
 }
 
 .rating:hover + .info {
+  /*on hover, show info box*/
       display: block;
     background-color: blue;
     color: white;
@@ -112,12 +115,14 @@ td {
 }
                
 .App-title {
+  /*styles for App-title, used for a backdrop for the header text at login*/
   background-color: black;
   padding: 1%;
   border-radius: 30%;
 }        
 
 .input {
+  /*ensure inputs are readable and easy to interact with*/
   background-color: white;
   color: black;
   border-radius: 10px;
@@ -125,6 +130,7 @@ td {
 }
 
 .App-header {
+  /*styles for all with tag of App-header, used for google fonts and other display preferences*/
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -132,19 +138,18 @@ td {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  /*we want almost everything to hover over what is in App-header*/
   z-index: -5;
   font-family: 'Permanent Marker', cursive;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
 div, button {
+  /*used to give other google font style to other elements, also default margin of 15px*/
   margin: 15px;
   font-family: 'Gloria Hallelujah', cursive;
 }
 
 div {
+  /*cover most other elements*/
   z-index: 5;
 }

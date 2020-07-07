@@ -16,6 +16,7 @@ class App extends Component {
   state = {
     toggle: false,
     toggle2: false,
+    //state that houses current playing values grabbed from spotify
     nowPlaying: {
       name: "",
       artist: "",
@@ -25,6 +26,7 @@ class App extends Component {
     },
   }
   componentDidMount() {
+    //fetches user info on mount from login info, ensures we don't lose user info on refresh
     this.props.dispatch({ type: 'FETCH_USER' })
     //calls getNowPlaying on mount
     this.getNowPlaying();
@@ -59,8 +61,9 @@ class App extends Component {
       });
     });
   }
-
+  //function for logout
   logout = () => {
+    //sweet alerts!
     swal({
       title: "Confirm logout?",
       text: "Click ok to confirm logout",
@@ -70,20 +73,25 @@ class App extends Component {
     })
       .then((willLogout) => {
         if (willLogout) {
+          //runs logout from redux sagas
           this.props.dispatch({ type: "LOGOUT" })
+          //success!
           swal("Logout successful", {
             icon: "success",
           });
         } else {
+          //...else cancel
           swal("Logout canceled");
         }
       });
   }
+  //toggle
   toggle = () => {
     this.setState({
       toggle: !this.state.toggle,
     });
   };
+  //toggle2
   toggle2 = () => {
     this.setState({
       toggle2: !this.state.toggle2,
@@ -94,8 +102,10 @@ class App extends Component {
  
   return (
     <div className="App">
+      {/* is the user logged in? */}
       {this.props.user.username ? (
         <>
+          {/* if toggle2 is false render the nowPlaying window, this is default */}
           {this.state.toggle2 === false ? (
             <Paper
               style={{
@@ -103,7 +113,7 @@ class App extends Component {
                 top: 0,
                 position: "fixed",
                 borderRadius: "10%",
-                height: "400px",
+                height: "500px",
                 width: "400px",
                 fontSize: "15px",
                 zIndex: 10000,
@@ -111,13 +121,12 @@ class App extends Component {
               elevation="24"
               className="loginBox"
             >
-              {" "}
-              {/* user currently signed in */}
-              <p>Hello: {this.props.user.username}</p>
+              
               {/* populates with current playing info */}
               <table>
                 <tr>
                   <td>
+                    {/* pushes song, artist, and album to the left of window */}
                     <ul
                       style={{
                         float: "left",
@@ -125,18 +134,22 @@ class App extends Component {
                       }}
                     >
                       <li>
+                        {/* current track */}
                         <b>Track:</b> {this.state.nowPlaying.name}
                       </li>
                       <li>
+                        {/* current artist */}
                         <b>Artist:</b> {this.state.nowPlaying.artist}
                       </li>
                       <li>
+                        {/* current album */}
                         <b>Album:</b> {this.state.nowPlaying.album}
                       </li>
                     </ul>
                   </td>
                   <td>
                     <div>
+                      {/* pushes album artwork to right */}
                       <img
                         style={{
                           float: "right",
@@ -149,6 +162,8 @@ class App extends Component {
                   </td>
                 </tr>
               </table>
+              {/* user currently signed in */}
+              <p>Hello: {this.props.user.username}</p>
               <br />
               {/* button to log in with spotify, takes you to spotify web api server used for log in */}
               <a href="http://localhost:8888">
@@ -166,6 +181,7 @@ class App extends Component {
               </Button>
 
               <br />
+              {/* toggles window to make it appear or disappear */}
               <Button
                 variant="contained"
                 color="secondary"
@@ -175,6 +191,7 @@ class App extends Component {
               </Button>
             </Paper>
           ) : (
+            // ...else shrinks window and only shows button to toggle back.
               <Paper
                 style={{
                   right: 0,
@@ -201,11 +218,14 @@ class App extends Component {
             )}
         </>
       ) : (
+        //...else if user is not logged in, render nothing
           <span></span>
         )}
       <Header /> {/*Header page which includes login */}
+      {/* grid layout for mobile friendly, fits screensize */}
       <Grid container spacing={1}>
         <Grid container item md={12} lg={6}>
+          {/* toggles recommendation page on and off */}
       <Button
         onClick={this.toggle}
         className="feedbackButton"
@@ -216,11 +236,13 @@ class App extends Component {
         <h1>Recommendations</h1>
             </Button>
             {this.state.toggle === false ? (
+              //if toggle is false, render nothing, this is the default
               <span></span>
             ) : (
+              //...else if true, render Recommendations component
       <Recommendations /> 
               
-        )} {/*Recommendations page */}
+        )} {/*...end Recommendations page */}
         </Grid>
         <Grid container item md={12} lg={6}>
       <RandomSong /> {/*RandomSong page */}

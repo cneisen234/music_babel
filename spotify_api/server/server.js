@@ -21,8 +21,8 @@ app.use(passport.session());
 /** ---------- EXPRESS ROUTES ---------- **/
 const userRouter = require("./routes/user.router");
 const musicRouter = require("./routes/music.router.js"); //routes to feedback.router.js
-app.use("/music", musicRouter);
-app.use("/api/user", userRouter);
+app.use("/music", musicRouter); //router for music paths
+app.use("/api/user", userRouter); //router paths related to user login and authentication
 
 /** ---------- START SERVER ---------- **/
 app.listen(PORT, () => {

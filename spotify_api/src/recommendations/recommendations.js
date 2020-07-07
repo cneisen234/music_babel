@@ -14,24 +14,29 @@ class Recommendations extends Component {
       album: "",
       rate: null,
   }
+  //fetches music list from database on mount
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_MUSIC" });
   }
+  //function to toggle
   toggle = () => {
     this.setState({
       toggle: !this.state.toggle,
     });
   };
+  //function to handle unput changes
   handleChange = (event, fieldName) => {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
+  //function to POST a recommendation
   addNewRecommendation = (event) => {
+    //prevents default action
     event.preventDefault();
     
     //grabs all keys in Redux state
     const { username } = this.props.user;
+    //grabs keys in local state
     const { song, artist, album } = this.state 
-    console.log("song, artist, album", song, artist, album)
     //sweet alerts
     swal({
       //confirmation page exists in sweet alerts notification
@@ -56,7 +61,7 @@ class Recommendations extends Component {
             artist: artist,
             album: album,
           }
-       //data from Redux state to POST
+       //data from local state to POST
         }) //end axios
           .then((response) => {// start .then
             this.props.dispatch({ type: "FETCH_MUSIC" });
@@ -73,6 +78,7 @@ class Recommendations extends Component {
         swal("Your recommendations submission was canceled!");
       }
     })
+    //reset local state
     this.setState ({
       song: "",
       artist: "",
@@ -85,11 +91,14 @@ class Recommendations extends Component {
   render() {
     return (
       <div className="App">
-        {/* onSubmit run submitInfo function */}
+        {/* start form for POST of a new recommendation */}
         {!this.props.user.username ? ( 
+          //if user is not logged in, render no inputs
         <span></span>
         ) : (
+          //is the user logged in? If so, render
         <form onSubmit={this.addNewRecommendation}>
+          {/* song */}
           <TextField
             variant="outlined"
             required
@@ -101,6 +110,7 @@ class Recommendations extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "song")} //onChange of input values set local state
           /><br />
+          {/* artist */}
           <TextField
             variant="outlined"
             required
@@ -112,6 +122,7 @@ class Recommendations extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "artist")} //onChange of input values set local state
           /><br />
+          {/* album */}
           <TextField
             variant="outlined"
             required
@@ -124,9 +135,8 @@ class Recommendations extends Component {
             onChange={(event) => this.handleChange(event, "album")} //onChange of input values set local state
           />
           <br />
-          {/* onClick tied to form element, runs submitInfo on click */}
+              {/* onClick tied to form element, runs addNewRecommendation on click */}
           <Button
-            className="feedbackButton"
             variant="contained"
             color="secondary"
             type="submit"

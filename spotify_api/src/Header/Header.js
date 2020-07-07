@@ -37,6 +37,7 @@ class Header extends Component {
           password: this.state.password,
         },
       });
+      //toggles back to login when registered
       this.toggle();
       swal(`welcome ${this.state.username} to Music Babel! 
       Enjoy!`, {
@@ -75,8 +76,9 @@ class Header extends Component {
       [propertyName]: event.target.value,
     });
   };
-  
+  //function to log user out
   logout = () => {
+    //sweet alerts!
     swal({
       title: "Confirm logout?",
       text: "Click ok to confirm logout",
@@ -107,7 +109,7 @@ class Header extends Component {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
-     
+          {/* Title headers that appear at top of page */}
           <h1 className="App-title">Music Babel</h1>
           <h3 className="App-title">Your place for music community</h3>
           {/* button to log in with spotify, takes you to spotify web api server used for log in */}
@@ -135,6 +137,7 @@ class Header extends Component {
               <h4 className="App-title">Login:</h4>
               {/* login form */}
               <form onSubmit={this.login}>
+                {/* username */}
                 <TextField
                   className="input"
                   type="text"
@@ -145,6 +148,7 @@ class Header extends Component {
                   value={this.state.username}
                   onChange={this.handleInputChangeFor("username")}
                 />
+                {/* password */}
                 <TextField
                   className="input"
                   type="password"
@@ -156,6 +160,7 @@ class Header extends Component {
                   onChange={this.handleInputChangeFor("password")}
                 />
                 <br />
+                {/* login */}
                 <Button
                   className="log-in"
                   type="submit"
@@ -182,6 +187,7 @@ class Header extends Component {
               {/* registeration form */}
               <form onSubmit={this.registerUser}>
                 <h4 className="App-title">Sign up:</h4>
+                {/* username */}
                 <TextField
                   className="input"
                   type="text"
@@ -193,6 +199,7 @@ class Header extends Component {
                   onChange={this.handleInputChangeFor("username")}
                 />
                 <br />
+                {/* password */}
                 <TextField
                   className="input"
                   type="password"
@@ -204,6 +211,7 @@ class Header extends Component {
                   onChange={this.handleInputChangeFor("password")}
                 />
                 <br />
+                {/* profile pic */}
                 <TextField
                   type="text"
                   placeholder="profile pic"
@@ -212,6 +220,7 @@ class Header extends Component {
                   className="input"
                 />
                 <br />
+                {/* register */}
                 <Button
                   className="register"
                   type="submit"
