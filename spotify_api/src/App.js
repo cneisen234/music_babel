@@ -164,7 +164,7 @@ class App extends Component {
                 top: 0,
                 position: "fixed",
                 borderRadius: "10%",
-                height: "500px",
+                height: "600px",
                 width: "400px",
                 fontSize: "15px",
                 zIndex: 10000,

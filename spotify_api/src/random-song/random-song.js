@@ -351,13 +351,13 @@ class RandomSong extends Component {
             <MenuItem value="2"><Rating value={2} readOnly size="small" /></MenuItem>
             <MenuItem value="1"><Rating value={1} readOnly size="small" /></MenuItem>
           </Select>
-          <Button
+          <button
             variant="contained"
             color="secondary"
             type="submit"
           >
-            <GradeIcon />
-            </Button>
+            Rate this song?
+            </button>
         </form>
         {/* gives a list of artists that are similar to randomly generated one. */}
         <table className="similar">
