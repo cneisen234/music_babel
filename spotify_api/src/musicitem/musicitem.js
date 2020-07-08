@@ -336,16 +336,16 @@ class MusicItem extends Component {
           />
           <br />
           {/* onClick tied to form element, runs submitInfo on click */}
-          <Button
+          <button
             className="recommendationButton"
             variant="contained"
             color="secondary"
             type="submit"
           >
             Edit recommendation
-            </Button>
+            </button>
         </form>
-                <Button
+                <button
                   onClick={this.toggle}
                   className="recommendationButton"
                   variant="contained"
@@ -353,7 +353,7 @@ class MusicItem extends Component {
                   type="submit"
                 >
                   Go Back
-            </Button></td></Paper>
+            </button></td></Paper>
                 )}
 
       </tr>

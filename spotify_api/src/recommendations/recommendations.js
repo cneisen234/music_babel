@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
+import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
 import MusicItem from "../musicitem/musicitem"
 import swal from "sweetalert";
 import axios from "axios";
@@ -98,6 +98,8 @@ class Recommendations extends Component {
         ) : (
           //is the user logged in? If so, render
         <form onSubmit={this.addNewRecommendation}>
+              <Grid container spacing={1}>
+                <Grid container item md={12} lg={4}>
           {/* song */}
           <TextField
             variant="outlined"
@@ -110,6 +112,8 @@ class Recommendations extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "song")} //onChange of input values set local state
           /><br />
+          </Grid>
+                <Grid container item md={12} lg={4}>
           {/* artist */}
           <TextField
             variant="outlined"
@@ -122,6 +126,8 @@ class Recommendations extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "artist")} //onChange of input values set local state
           /><br />
+          </Grid>
+                <Grid container item md={12} lg={4}>
           {/* album */}
           <TextField
             variant="outlined"
@@ -134,15 +140,18 @@ class Recommendations extends Component {
             maxLength={1000}
             onChange={(event) => this.handleChange(event, "album")} //onChange of input values set local state
           />
-          <br />
+          </Grid>
+          </Grid>
               {/* onClick tied to form element, runs addNewRecommendation on click */}
-          <Button
-            variant="contained"
-            color="secondary"
+              <Grid container spacing={1}>
+            <Grid container item md={12}>
+          <button
             type="submit"
           >
             Add recommendation
-            </Button>
+            </button>
+            </Grid>
+            </Grid>
         </form>
         )}
         <div>

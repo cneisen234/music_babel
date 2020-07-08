@@ -4,6 +4,7 @@ import './App.css';
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
 import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
+import axios from "axios";
 //define class of new Spotify into spotifyWebApi
 import RandomSong from "./random-song/random-song"
 import Recommendations from "./recommendations/recommendations"
@@ -18,7 +19,7 @@ class App extends Component {
     toggle2: false,
     //state that houses current playing values grabbed from spotify
     nowPlaying: {
-      name: "",
+      song: "",
       artist: "",
       album: "",
       image:
@@ -40,7 +41,7 @@ class App extends Component {
       this.getNowPlaying();
       this.forceUpdate();
       console.log("force rerender");
-    }, 20000);
+    }, 10000);
   }
   getNowPlaying() {
     //web api function used for playback
@@ -53,7 +54,7 @@ class App extends Component {
       //set state with response
       this.setState({
         nowPlaying: {
-          name: response.item.name,
+          song: response.item.name,
           artist: response.item.artists[0].name,
           album: response.item.album.name,
           image: response.item.album.images[0].url,
@@ -85,6 +86,56 @@ class App extends Component {
         }
       });
   }
+  addNewRecommendation = (event) => {
+    //prevents default action
+    event.preventDefault();
+
+    //grabs all keys in Redux state
+    const { username } = this.props.user;
+    //grabs keys in local state
+    const { song, artist, album } = this.state.nowPlaying
+    //sweet alerts
+    swal({
+      //confirmation page exists in sweet alerts notification
+      title: "Confirm your recommendation",
+      text: `${this.props.user.username}'s recommendation
+        Song: ${song}
+        Artist: ${artist}
+        Album: ${album}
+        click "ok" to confirm`,
+      icon: "info",
+      buttons: true,
+      dangerMode: true,
+      //end sweet alerts
+    }).then((confirm) => {//start .then
+      if (confirm) {
+        axios({ //start axios
+          method: "POST",
+          url: "/music",
+          data: {
+            username: username,
+            song: song,
+            artist: artist,
+            album: album,
+          }
+          //data from local state to POST
+        }) //end axios
+          .then((response) => {// start .then
+            this.props.dispatch({ type: "FETCH_MUSIC" });
+          }) //end .then
+          .catch((error) => { //start .catchError
+            console.log(error);
+          }); //end .catchError
+        //success! Info POSTED to database
+        swal("Thank you for your recommendation!", {
+          icon: "success",
+        });
+        //...else canceled
+      } else {
+        swal("Your recommendations submission was canceled!");
+      }
+    })
+  };
   //toggle
   toggle = () => {
     this.setState({
@@ -135,7 +186,7 @@ class App extends Component {
                     >
                       <li>
                         {/* current track */}
-                        <b>Track:</b> {this.state.nowPlaying.name}
+                        <b>Track:</b> {this.state.nowPlaying.song}
                       </li>
                       <li>
                         {/* current artist */}
@@ -163,32 +214,43 @@ class App extends Component {
                 </tr>
               </table>
               {/* user currently signed in */}
-              <p>Hello: {this.props.user.username}</p>
-              <br />
+              <p className="name">Hello: {this.props.user.username}</p>
               {/* button to log in with spotify, takes you to spotify web api server used for log in */}
               <a href="http://localhost:8888">
-                <Button variant="contained" color="secondary">
+                <button variant="contained" color="secondary">
                   Link to Spotify
-                </Button>
+                </button>
               </a>
               {/* logout */}
-              <Button
+              <button
                 variant="contained"
                 color="secondary"
                 onClick={this.logout}
               >
                 Log out
-              </Button>
+              </button>
+              {this.state.nowPlaying.song === "" ? (
+                <span></span>
+              ) : (
+              
+              <button
+                variant="contained"
+                color="secondary"
+                onClick={this.addNewRecommendation}
+              >
+                Recommend this song?
+              </button>
+              )}
 
-              <br /><br /><br />
+              <br />
               {/* toggles window to make it appear or disappear */}
-              <Button
+              <button
                 variant="contained"
                 color="secondary"
                 onClick={this.toggle2}
               >
                 toggle window
-              </Button>
+              </button>
             </Paper>
           ) : (
             // ...else shrinks window and only shows button to toggle back.
@@ -198,7 +260,7 @@ class App extends Component {
                   bottom: 0,
                   position: "fixed",
                   borderRadius: "10%",
-                  height: "50px",
+                  height: "100px",
                   width: "150px",
                   fontSize: "15px",
                   zIndex: 10000,
@@ -207,13 +269,13 @@ class App extends Component {
                 className="loginBox"
               >
                 {" "}
-                <Button
+                <button
                   variant="contained"
                   color="secondary"
                   onClick={this.toggle2}
                 >
                   toggle window
-              </Button>
+              </button>
               </Paper>
             )}
         </>
@@ -244,9 +306,14 @@ class App extends Component {
               
         )} {/*...end Recommendations page */}
         </Grid>
+        {!this.props.user.username ? (
+          //can only generate a random song if logged in
+          <span></span>
+        ) : (
         <Grid container item md={12} lg={6}>
       <RandomSong /> {/*RandomSong page */}
       </Grid>
+        )}
     </Grid>
     </div>
   );

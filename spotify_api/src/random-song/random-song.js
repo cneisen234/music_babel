@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
+import GradeIcon from '@material-ui/icons/Grade';
 import Rating from '@material-ui/lab/Rating';
 import axios from "axios";
 import swal from "sweetalert";
@@ -293,20 +294,44 @@ class RandomSong extends Component {
     this.setState({
       rate: null
     })
-    window.location.reload(false);
+    this.forceUpdate();
   };
   render() {
     //grabs artists info from getRelatedArtists, saves to varable.
     const { artists } = this.state.relatedArtists;
     return (
       <div className="App">
-        <h1>RANDOM SONG</h1>
         {/* generates random song */}
         <button onClick={() => this.randomSong()}>Generate Random Song</button>
-        <div>Artist: {this.state.randomSong.artist}</div>
-        <div>Album: {this.state.randomSong.album}</div>
-        <div>Track: {this.state.randomSong.song}</div>
-        {JSON.stringify(this.props.music[this.props.music.length - 1] && this.props.music[this.props.music.length - 1].id[0])}
+        {this.state.randomSong.artist === "artist" ? (
+          //if no random song is generated render nothing, this is the default
+          <span></span>
+        ) : (
+            //...else render rate and open in spotify
+            <>
+        <table>
+          <tr>
+            <td>
+        <div><b>Artist:</b> {this.state.randomSong.artist}</div>
+        <div><b>Album:</b> {this.state.randomSong.album}</div>
+        <div><b>Track:</b> {this.state.randomSong.song}</div>
+        </td>
+        <td>
+        <div>
+          <img
+            src={this.state.randomSong.image}
+            alt="album art"
+            style={{ width: 100 }}
+          />
+        </div>
+        </td>
+        </tr>
+        </table>
+        {/* takes open log, places it in href, can open random song in spotify */}
+  
+        <a href={this.state.randomSong.open} target="_blank">
+          <button>Open this song in spotify</button>
+        </a>
         <form onSubmit={this.addNewRecommendation}>
           <Select
             style={{
@@ -331,28 +356,37 @@ class RandomSong extends Component {
             color="secondary"
             type="submit"
           >
-            Add recommendation
+            <GradeIcon />
             </Button>
         </form>
-        <div>
-          <img
-            src={this.state.randomSong.image}
-            alt="album art"
-            style={{ width: 100 }}
-          />
-        </div>
-        {/* takes open log, places it in href, can open random song in spotify */}
-        <a href={this.state.randomSong.open} target="_blank">
-          <button>Open this song in spotify</button>
-        </a>
         {/* gives a list of artists that are similar to randomly generated one. */}
+        <table className="similar">
+          <tr>
+            Similar Artists:
+          </tr>
+          <tr>
+            <td>
         <ul>
-          Similar Artists:
           {artists.map((artist, index) => {
+            if (index < 10) {
             return <li key={index}>{artist}</li>;
+            }
           })}
         </ul>
+        </td>
+        <td>
+        {artists.map((artist, index) => {
+        if (index >= 10) {
+             return <li key={index}>{artist}</li>;
+          }
+        })}
+        </td>
+        </tr>
+        </table>
+            </>
+          )}
       </div>
+      
     );
   }
 }

@@ -93,6 +93,10 @@ td {
   padding: 10px;
   border-radius: 15px;
 }
+.name {
+  font-size: 120%;
+}
+
 .info {
   /*info box for each item defaults to display: none;*/
   display: none;
@@ -150,6 +154,20 @@ div, button {
   /*used to give other google font style to other elements, also default margin of 15px*/
   margin: 15px;
   font-family: 'Gloria Hallelujah', cursive;
+}
+
+button {
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  font-size: 120%;
+  border-radius: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
 }
 
 div {
