@@ -34,10 +34,10 @@ class MusicItem extends Component {
       // start .then
       //if confirmed, delete
           if(willDelete) {
-            console.log("this.props.musicitem.id", this.props.musicitem.id)
+            console.log("this.props.musicitem.id", this.props.musicitem.id[0])
             axios({
               method: "DELETE",
-              url: `/music/${this.props.musicitem.id}`,
+              url: `/music/${this.props.musicitem.id[0]}`,
               //grabs id of component that we are interacting with
         })
         .then(function (response) {});

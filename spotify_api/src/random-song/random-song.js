@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-// import "./App.css";
+import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
+import Rating from '@material-ui/lab/Rating';
+import axios from "axios";
+import swal from "sweetalert";
+import { connect } from "react-redux";
+import "../App.css";
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
 //define class of new Spotify into spotifyWebApi
@@ -13,9 +18,11 @@ class RandomSong extends Component {
     const params = this.getHashParams();
     //default state
     this.state = {
+      username: "",
+      rate: null,
       loggedIn: params.access_token ? true : false,
       nowPlaying: {
-        name: "Not Checked",
+        name: "",
         artist: "",
         album: "",
         image:
@@ -37,6 +44,9 @@ class RandomSong extends Component {
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
     }
+  }
+  componentDidMount() {
+    this.props.dispatch({ type: "FETCH_MUSIC" });
   }
   //generates new token
   getHashParams() {
@@ -196,6 +206,95 @@ class RandomSong extends Component {
       });
   }
 
+  handleChange = (event, fieldName) => {
+    this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
+  }; //end handleChange
+
+  addNewRecommendation = (event) => {
+    //prevents default action
+    event.preventDefault();
+
+    //grabs all keys in Redux state
+    const { username } = this.props.user;
+    const { song } = this.state.randomSong
+    //sweet alerts
+    swal({
+      //confirmation page exists in sweet alerts notification
+      title: "You're rating?",
+      text: `${this.props.user.username}'s rating
+        You are giving ${song} a rating of ${this.state.rate}
+        click "ok" to confirm`,
+      icon: "info",
+      buttons: true,
+      dangerMode: true,
+      //end sweet alerts
+    }).then((confirm) => {//start .then
+      if (confirm) {
+        if(this.state.rate < 3) {
+          this.randomSong();
+          swal("Thank you for your feedback. Grabbing new random song now")
+        } else {
+        axios({ //start axios
+          method: "POST",
+          url: "/music",
+          data: {
+            username: username,
+            song: this.state.randomSong.song,
+            artist: this.state.randomSong.artist,
+            album: this.state.randomSong.album,
+          }
+          //data from local state to POST
+        }) //end axios
+          .then((response) => {// start .then
+            this.props.dispatch({ type: "FETCH_MUSIC" });
+          }) //end .then
+          .catch((error) => { //start .catchError
+            console.log(error);
+          }); //end .catchError
+        //success! Info POSTED to database
+        swal("Glad to hear you liked this song. It will be saved to the recommendations list with your rating!", {
+          icon: "success",
+        });
+        this.forceUpdate();
+        setTimeout(() => {
+          this.rate();
+        }, 1500);
+      };
+        //...else canceled
+      } else {
+        swal("Your rating submission was canceled!");
+      }
+    })
+  };
+
+
+  rate = (event) => {
+
+    //grabs all keys in Redux state
+    const { music } = this.props;
+    const { rate } = this.state
+        axios({ //start axios
+          method: "POST",
+          url: "/music/rate",
+          data: {
+            id: this.props.music[this.props.music.length - 1] && this.props.music[this.props.music.length - 1].id[0],
+            rate: rate,
+          }
+          //data from local state to POST
+        }) //end axios
+          .then((response) => {// start .then
+            this.props.dispatch({ type: "FETCH_MUSIC" });
+          }) //end .then
+          .catch((error) => { //start .catchError
+            console.log(error);
+          }); //end .catchError
+        
+    //resets local state
+    this.setState({
+      rate: null
+    })
+    window.location.reload(false);
+  };
   render() {
     //grabs artists info from getRelatedArtists, saves to varable.
     const { artists } = this.state.relatedArtists;
@@ -207,6 +306,34 @@ class RandomSong extends Component {
         <div>Artist: {this.state.randomSong.artist}</div>
         <div>Album: {this.state.randomSong.album}</div>
         <div>Track: {this.state.randomSong.song}</div>
+        {JSON.stringify(this.props.music[this.props.music.length - 1] && this.props.music[this.props.music.length - 1].id[0])}
+        <form onSubmit={this.addNewRecommendation}>
+          <Select
+            style={{
+              backgroundColor: "white",
+            }}
+            variant="outlined"
+            required
+            name="rate"
+            //sets value of input to value of local state
+            value={this.state.rate}
+            onChange={(event) => this.handleChange(event, "rate")} //sends input values to local state
+          >
+            {/* select items 1 - 5 */}
+            <MenuItem value="5"><Rating value={5} readOnly size="small" /></MenuItem>
+            <MenuItem value="4"><Rating value={4} readOnly size="small" /></MenuItem>
+            <MenuItem value="3"><Rating value={3} readOnly size="small" /></MenuItem>
+            <MenuItem value="2"><Rating value={2} readOnly size="small" /></MenuItem>
+            <MenuItem value="1"><Rating value={1} readOnly size="small" /></MenuItem>
+          </Select>
+          <Button
+            variant="contained"
+            color="secondary"
+            type="submit"
+          >
+            Add recommendation
+            </Button>
+        </form>
         <div>
           <img
             src={this.state.randomSong.image}
@@ -230,4 +357,9 @@ class RandomSong extends Component {
   }
 }
 
-export default RandomSong;
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  music: state.music,
+  user: state.user,
+});
+export default connect(mapStateToProps)(RandomSong);

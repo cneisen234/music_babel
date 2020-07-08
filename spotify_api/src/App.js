@@ -180,7 +180,7 @@ class App extends Component {
                 Log out
               </Button>
 
-              <br /><br /><br /><br />
+              <br /><br /><br />
               {/* toggles window to make it appear or disappear */}
               <Button
                 variant="contained"
