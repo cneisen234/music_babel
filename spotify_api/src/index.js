@@ -126,6 +126,16 @@ function* fetchMusic() {
   }
 }
 
+function* fetchSearch() {
+  try {
+    const response = yield axios.get("/music/search");
+    console.log("fetch music:", response.data)
+    yield put({ type: "SET_SEARCH", payload: response.data });
+  } catch (error) {
+    console.log("error fetch music", error);
+  }
+}
+
 function* postMusic(action) {
   try {
     console.log(action.payload);
@@ -171,6 +181,7 @@ function* editMusic(action) {
 
 function* rootSaga() {
   yield takeEvery("FETCH_MUSIC", fetchMusic); //fetchMusic goes to FETCH_MUSIC
+  yield takeEvery("FETCH_SEARCH", fetchSearch); //fetchSearch goes to FETCH_SEARCH
   yield takeEvery('ADD_MUSIC', postMusic); //postMusic goes to ADD_MUSIC
   yield takeEvery('ADD_RATE', postRate); //postRate goes to ADD_RATE
   yield takeEvery("DELETE_MUSIC", deleteMusic); //deleteMusic goes to DELETE_MUSIC
@@ -187,6 +198,16 @@ const sagaMiddleware = createSagaMiddleware();
 const music = (state = [], action) => {
   switch (action.type) {
     case "SET_MUSIC":
+      return action.payload;
+    default:
+      return state;
+  }
+  //user reducer
+};
+
+const search = (state = [], action) => {
+  switch (action.type) {
+    case "SET_SEARCH":
       return action.payload;
     default:
       return state;
@@ -248,6 +269,7 @@ const registrationMessage = (state = "", action) => {
 const storeInstance = createStore(
   combineReducers({
     music,
+    search,
     user,
     loginMode,
     loginMessage,

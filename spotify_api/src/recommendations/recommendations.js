@@ -15,10 +15,12 @@ class Recommendations extends Component {
       rate: null,
       start: 0,
       finish: 5,
+      toggle: false,
   }
   //fetches music list from database on mount
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_MUSIC" });
+    this.props.dispatch({ type: "FETCH_SEARCH" });
   }
   //function to toggle
   toggle = () => {
@@ -104,6 +106,7 @@ class Recommendations extends Component {
         <span></span>
         ) : (
           //is the user logged in? If so, render
+          <>
         <form onSubmit={this.addNewRecommendation}>
               <Grid container spacing={1}>
                 <Grid container item md={12} lg={4}>
@@ -160,9 +163,13 @@ class Recommendations extends Component {
             </Grid>
             </Grid>
         </form>
+        <button onClick={this.toggle}>Search</button>
+        </>
         )}
         <div>
               {/* map through entire data query */}
+              {this.state.toggle === false ? (
+                <>
               {this.props.music.map((musicitem, index) => {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
@@ -175,6 +182,10 @@ class Recommendations extends Component {
                 <span></span> 
               ) : (
                 <button onClick={this.next}>Next</button>
+              )}
+              </>
+              ) : (
+                <span></span>
               )}
         </div>
       </div>
