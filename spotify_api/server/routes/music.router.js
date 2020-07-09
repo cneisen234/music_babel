@@ -16,9 +16,11 @@ router.get('/', (req, res) => {
         res.sendStatus(500);
     });
 }) //end GET
+//POST to search the query for artist, album, or song
 router.post("/search", (req, res) => {
     const  { search } = req.body
     console.log("search", search)
+    //ILIKE on song, artist, and album for search query, plugs in user input into ILIKE
     const queryText = ('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, AVG(rate) as rate from "recommendation" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" WHERE song ILIKE $1 OR artist ILIKE $1 OR album ILIKE $1 GROUP BY recommendation.id;')
     pool
         .query(queryText, [`%${search}%`])
@@ -28,7 +30,7 @@ router.post("/search", (req, res) => {
         console.log('Error GET /recommendations', error)
         res.sendStatus(500);
     });
-});
+}); //end POST
 
 //POST the new recommendation
 router.post("/", rejectUnauthenticated, (req, res) => {
@@ -124,7 +126,6 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
     const { username, song, artist, album } = music
     console.log("username", username)
     let queryText = `UPDATE recommendation SET song = $1, artist = $2, album = $3 WHERE  (username = $4 AND id = $5)`;
-    //....and uopdates it with put to flagged
     pool
         .query(queryText, [song, artist, album, username, id])
 
@@ -137,7 +138,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
             console.log("Sorry, there was an error with your query: ", error);
             res.sendStatus(500); // HTTP SERVER ERROR
         });
-});
+});//end PUT
 
 
 module.exports = router;

@@ -94,6 +94,7 @@ td {
   border-radius: 15px;
 }
 .name {
+  /*font size of display name in now listening window*/
   font-size: 120%;
 }
 
@@ -101,9 +102,7 @@ td {
   /*info box for each item defaults to display: none;*/
   display: none;
 }
-.rating {
-  float: left;
-}
+
 .rating:hover + .info {
   /*on hover, show info box*/
   float: right;
@@ -157,6 +156,7 @@ div, button {
 }
 
 button {
+  /*styles for all buttons not styled with Material UI*/
   cursor: pointer;
   background-color: black;
   color: white;
@@ -165,6 +165,7 @@ button {
 }
 
 button:hover {
+  /*style of buttons on hover*/
   cursor: pointer;
   background-color: white;
   color: black;

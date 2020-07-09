@@ -6,6 +6,7 @@ import swal from "sweetalert";
 import axios from "axios";
 
 class Recommendations extends Component {
+  //local state
   state = {
       id: null,
       username: "",
@@ -56,7 +57,7 @@ class Recommendations extends Component {
       //end sweet alerts
     }).then((confirm) => {//start .then
       if (confirm) {
-      
+      //runs axios request in sagas
         this.props.dispatch({
           type: 'ADD_MUSIC', payload: {
             username: username,
@@ -86,6 +87,7 @@ class Recommendations extends Component {
     event.preventDefault();
     //grabs keys in local state
     const { search } = this.state
+    //runs axios request in sagas
         this.props.dispatch({
           type: 'POST_SEARCH', payload: {
             search: search
@@ -96,14 +98,14 @@ class Recommendations extends Component {
       search: ""
     })
   };
-
+  //sets state of start and finish to +5 to generate next 5 items
   next = () => {
     this.setState({
       start: this.state.start + 5,
       finish: this.state.finish + 5,
     })
   }
-
+   //sets state of start and finish to -5 to generate previous 5 items
   previous = () => {
     this.setState({
       start: this.state.start - 5,
@@ -179,6 +181,7 @@ class Recommendations extends Component {
             </Grid>
             </Grid>
         </form>
+        {/* onClick search from display view to search view */}
         <button onClick={this.toggle}>Search</button>
         </>
         )}
@@ -189,11 +192,14 @@ class Recommendations extends Component {
               {this.props.music.map((musicitem, index) => {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
+                // also only renders items that are inbetween the index of start and finish in state
                 if (index > this.state.start && index <= this.state.finish) {
                 return <MusicItem key={musicitem.id} musicitem={musicitem} />;
                 }
               })}
+              {/* if there are no previous items, make previous button disappear */}
               {this.state.start !== 0 && <button onClick={this.previous}>previous</button>}
+              {/* if there are no next items, make next button disappear */}
               {(this.state.start > this.props.music.length - 7) ? (
                 <span></span> 
               ) : (
@@ -202,6 +208,7 @@ class Recommendations extends Component {
               </>
               ) : (
               <>
+              {/* search box */}
                 <TextField
                   variant="outlined"
                   required

@@ -6,9 +6,9 @@ import GradeIcon from '@material-ui/icons/Grade';
 import EditIcon from '@material-ui/icons/Edit';
 import Rating from '@material-ui/lab/Rating';
 import swal from "sweetalert";
-import axios from "axios";
 
 class MusicItem extends Component {
+  //local state
   state = {
     id: null,
     username: "",
@@ -34,7 +34,7 @@ class MusicItem extends Component {
       // start .then
       //if confirmed, delete
           if(willDelete) {
-
+            //routes to axios in sagas
             this.props.dispatch({
               type: 'DELETE_MUSIC', payload: this.props.musicitem.id[0]
             })
@@ -46,7 +46,6 @@ class MusicItem extends Component {
         //...else cancel action
         swal("Your recommendation is safe!");
       }
-      //reloads page after 1.5 seconds of deletion to reflect update on recommendations page
     });
   }; //end deleteReview
 
@@ -71,6 +70,7 @@ class MusicItem extends Component {
       //end sweet alerts
     }).then((confirm) => {
       if (confirm) {
+        //runs axios request in sagas
         this.props.dispatch({
           type: 'EDIT_MUSIC', payload: {
             id: this.props.musicitem.id,
@@ -92,12 +92,14 @@ class MusicItem extends Component {
       this.toggle();
     });
   };
+  //rates current song
   rate = (event) => {
     //prevents default action
     event.preventDefault();
 
-    //grabs all keys in Redux state
+    //grabs keys in Redux state
     const { id, song } = this.props.musicitem;
+    //grabs key in local state
     const { rate } = this.state
     //sweet alerts
     swal({
@@ -111,6 +113,7 @@ class MusicItem extends Component {
       //end sweet alerts
     }).then((confirm) => {//start .then
       if (confirm) {
+        //runs axios request in sagas
         this.props.dispatch({
           type: 'ADD_RATE', payload: {
             id: id[0],
@@ -137,7 +140,7 @@ class MusicItem extends Component {
   handleChange = (event, fieldName) => {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
-  //toggles and sets input fields to value on clicked recommendation
+  //toggles edit window
   toggle = () => {
     this.setState({
       toggle: !this.state.toggle,
@@ -150,9 +153,11 @@ class MusicItem extends Component {
     });
   };
   render() {
-    // grabs admin parem from map of parent
+    //grabs music item from mapped props
     const { musicitem } = this.props;
+    //defines varables of AVG rating coming from redux out of SQL
     let rate = this.props.musicitem.rate
+    //to get round AVG rating down to 2nd decimal point
     rate = Math.round(rate * 100) / 100
     return (
       // displays list of recommended songs from database
@@ -170,6 +175,7 @@ class MusicItem extends Component {
           // if toggle2 is false then render mainscreen
         <td>{!this.state.toggle2 ? (
           <>
+          {/* converts AVG rating from SQL to star rating posted to DOM */}
             <div className="rating" onClick={this.toggle2}><b>Average Rating:</b><Rating
               size="small"
               readOnly
@@ -177,6 +183,7 @@ class MusicItem extends Component {
               precision={0.1}
               max={5}
             /></div>
+            {/* a window pops up when hovering over AVG rating, informing user to click to rate */}
             <div className="info">
               Click here to vote on {musicitem.song}
             </div>
@@ -315,6 +322,7 @@ class MusicItem extends Component {
             Edit recommendation
             </button>
         </form>
+        {/* toggles edit window back to not displaying */}
                 <button
                   onClick={this.toggle}
                   className="recommendationButton"

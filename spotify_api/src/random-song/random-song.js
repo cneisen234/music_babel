@@ -29,6 +29,7 @@ class RandomSong extends Component {
         image:
           "https://image.shutterstock.com/image-vector/music-note-icon-vector-260nw-415866139.jpg",
       },
+      //state container for random song
       randomSong: {
         artist: "artist",
         album: "album",
@@ -37,6 +38,7 @@ class RandomSong extends Component {
           "https://image.shutterstock.com/image-vector/music-note-icon-vector-260nw-415866139.jpg",
         id: "id",
       },
+      //state container for related artists
       relatedArtists: {
         artists: [],
       },
@@ -339,6 +341,7 @@ class RandomSong extends Component {
           </tr>
           <tr>
             <td>
+              {/* renders first 10 similar artists on left colomn */}
         <ul>
           {artists.map((artist, index) => {
             if (index < 10) {
@@ -347,6 +350,7 @@ class RandomSong extends Component {
           })}
         </ul>
         </td>
+        {/* renders last 10 similar artists on right colomn */}
         <td>
         {artists.map((artist, index) => {
         if (index >= 10) {
@@ -360,10 +364,10 @@ class RandomSong extends Component {
           )}
       </div>
       
-    );
-  }
-}
-
+    ); //end return
+  } //end render
+} //end RandomSong
+//redux state
 const mapStateToProps = (state) => ({
   errors: state.errors,
   music: state.music,

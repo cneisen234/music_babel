@@ -4,8 +4,6 @@ import './App.css';
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
 import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
-import Rating from '@material-ui/lab/Rating';
-import axios from "axios";
 //define class of new Spotify into spotifyWebApi
 import RandomSong from "./random-song/random-song"
 import Recommendations from "./recommendations/recommendations"
@@ -224,6 +222,7 @@ class App extends Component {
               {this.state.nowPlaying.song === "" ? (
                 <span></span>
               ) : (
+                // will add current listening song to recommendations list
               <button
                 variant="contained"
                 color="secondary"
@@ -307,9 +306,10 @@ class App extends Component {
         )}
     </Grid>
     </div>
-  );
-  }
-}
+  ); //end return
+  } //end render
+}//end App
+//redux state
 const mapStateToProps = (state) => ({
   errors: state.errors,
   user: state.user,

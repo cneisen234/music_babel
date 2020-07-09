@@ -117,6 +117,7 @@ function* fetchUser() {
 
 
 function* fetchMusic() {
+  //runs GET on /music to grab all music and AVG ratings from database
   try {
     const response = yield axios.get("/music");
     console.log("fetch music:", response.data)
@@ -126,17 +127,8 @@ function* fetchMusic() {
   }
 }
 
-function* fetchSearch() {
-  try {
-    const response = yield axios.get("/music/search");
-    console.log("fetch music:", response.data)
-    yield put({ type: "SET_SEARCH", payload: response.data });
-  } catch (error) {
-    console.log("error fetch music", error);
-  }
-}
-
 function* postSearch(action) {
+  //runs POST on path /music/search to generate a search query from the database
   try {
     const response = yield axios.post(`/music/search`, action.payload);
     console.log("response.data", response.data)
@@ -147,6 +139,7 @@ function* postSearch(action) {
 }
 
 function* postMusic(action) {
+  //runs POST on path /music to post new song to database
   try {
     console.log(action.payload);
     yield axios.post(`/music`, action.payload);
@@ -157,6 +150,7 @@ function* postMusic(action) {
 }
 
 function* postRate(action) {
+  //runs PUT on path /music/rate to place a rating on a song in database
   try {
     console.log(action.payload);
     yield axios.post(`/music/rate`, action.payload);
@@ -167,6 +161,7 @@ function* postRate(action) {
 }
 
 function* deleteMusic(action) {
+  //runs DELETE on path /music/:id to delete selected song from database
   try {
     const config = {
       headers: { "Content-Type": "application/json" },
@@ -181,6 +176,7 @@ function* deleteMusic(action) {
 }
 
 function* editMusic(action) {
+  //runs PUT on path /music/:id to edit selected music item
   try {
     yield axios.put(`/music/${action.payload.id}`, action.payload.songData);
     yield put({ type: "FETCH_MUSIC" });
@@ -191,7 +187,7 @@ function* editMusic(action) {
 
 function* rootSaga() {
   yield takeEvery("FETCH_MUSIC", fetchMusic); //fetchMusic goes to FETCH_MUSIC
-  yield takeEvery("POST_SEARCH", postSearch); //fetchSearch goes to FETCH_SEARCH
+  yield takeEvery("POST_SEARCH", postSearch); //postSearch goes to POST_SEARCH
   yield takeEvery('ADD_MUSIC', postMusic); //postMusic goes to ADD_MUSIC
   yield takeEvery('ADD_RATE', postRate); //postRate goes to ADD_RATE
   yield takeEvery("DELETE_MUSIC", deleteMusic); //deleteMusic goes to DELETE_MUSIC
@@ -212,9 +208,8 @@ const music = (state = [], action) => {
     default:
       return state;
   }
-  //user reducer
 };
-
+//search reducer
 const search = (state = [], action) => {
   switch (action.type) {
     case "SET_SEARCH":
@@ -222,8 +217,8 @@ const search = (state = [], action) => {
     default:
       return state;
   }
-  //user reducer
 };
+//user reducer
 const user = (state = {}, action) => {
   switch (action.type) {
     case "SET_USER":
