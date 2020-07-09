@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 router.post("/search", (req, res) => {
     const  { search } = req.body
     console.log("search", search)
-    const queryText = ('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, AVG(rate) as rate from "recommendation" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" WHERE song ILIKE $1 GROUP BY recommendation.id;')
+    const queryText = ('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, AVG(rate) as rate from "recommendation" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" WHERE song ILIKE $1 OR artist ILIKE $1 OR album ILIKE $1 GROUP BY recommendation.id;')
     pool
         .query(queryText, [`%${search}%`])
     .then((result) => {
