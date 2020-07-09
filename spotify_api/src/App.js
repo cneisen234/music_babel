@@ -4,6 +4,7 @@ import './App.css';
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
 import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
+import Rating from '@material-ui/lab/Rating';
 import axios from "axios";
 //define class of new Spotify into spotifyWebApi
 import RandomSong from "./random-song/random-song"
@@ -86,7 +87,7 @@ class App extends Component {
         }
       });
   }
-  addNewRecommendation = (event) => {
+  addCurrentToRecommendation = (event) => {
     //prevents default action
     event.preventDefault();
 
@@ -109,23 +110,14 @@ class App extends Component {
       //end sweet alerts
     }).then((confirm) => {//start .then
       if (confirm) {
-        axios({ //start axios
-          method: "POST",
-          url: "/music",
-          data: {
+        this.props.dispatch({
+          type: 'ADD_MUSIC', payload: {
             username: username,
             song: song,
             artist: artist,
             album: album,
           }
-          //data from local state to POST
-        }) //end axios
-          .then((response) => {// start .then
-            this.props.dispatch({ type: "FETCH_MUSIC" });
-          }) //end .then
-          .catch((error) => { //start .catchError
-            console.log(error);
-          }); //end .catchError
+        })
         //success! Info POSTED to database
         swal("Thank you for your recommendation!", {
           icon: "success",
@@ -232,11 +224,10 @@ class App extends Component {
               {this.state.nowPlaying.song === "" ? (
                 <span></span>
               ) : (
-              
               <button
                 variant="contained"
                 color="secondary"
-                onClick={this.addNewRecommendation}
+                onClick={this.addCurrentToRecommendation}
               >
                 Recommend this song?
               </button>

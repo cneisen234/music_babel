@@ -126,6 +126,26 @@ function* fetchMusic() {
   }
 }
 
+function* postMusic(action) {
+  try {
+    console.log(action.payload);
+    yield axios.post(`/music`, action.payload);
+    yield put({ type: "FETCH_MUSIC" });
+  } catch (error) {
+    console.log("Error deleting recommendation:", error);
+  }
+}
+
+function* postRate(action) {
+  try {
+    console.log(action.payload);
+    yield axios.post(`/music/rate`, action.payload);
+    yield put({ type: "FETCH_MUSIC" });
+  } catch (error) {
+    console.log("Error deleting recommendation:", error);
+  }
+}
+
 function* deleteMusic(action) {
   try {
     const config = {
@@ -133,8 +153,16 @@ function* deleteMusic(action) {
       withCredentials: true,
     };
     //with DELETE, does not need response
-    console.log(action.payload);
     yield axios.delete(`/music/${action.payload}`, config);
+    yield put({ type: "FETCH_MUSIC" });
+  } catch (error) {
+    console.log("Error deleting recommendation:", error);
+  }
+}
+
+function* editMusic(action) {
+  try {
+    yield axios.put(`/music/${action.payload.id}`, action.payload.songData);
     yield put({ type: "FETCH_MUSIC" });
   } catch (error) {
     console.log("Error deleting recommendation:", error);
@@ -143,7 +171,10 @@ function* deleteMusic(action) {
 
 function* rootSaga() {
   yield takeEvery("FETCH_MUSIC", fetchMusic); //fetchMusic goes to FETCH_MUSIC
-  yield takeEvery("DELETE_MUSIC", deleteMusic); //fetchMusic goes to FETCH_MUSIC
+  yield takeEvery('ADD_MUSIC', postMusic); //postMusic goes to ADD_MUSIC
+  yield takeEvery('ADD_RATE', postRate); //postRate goes to ADD_RATE
+  yield takeEvery("DELETE_MUSIC", deleteMusic); //deleteMusic goes to DELETE_MUSIC
+  yield takeEvery("EDIT_MUSIC", editMusic); //editMusic goes to EDIT_MUSIC
     yield takeLatest("REGISTER", registerUser); //register goes to REGISTER
       yield takeLatest("LOGIN", loginUser); //loginUser goes to LOGIN
   yield takeLatest("LOGOUT", logoutUser); //logoutUser goes to LOGOUT

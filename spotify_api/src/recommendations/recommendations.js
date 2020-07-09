@@ -52,27 +52,18 @@ class Recommendations extends Component {
       //end sweet alerts
     }).then((confirm) => {//start .then
       if (confirm) {
-        axios({ //start axios
-          method: "POST",
-          url: "/music",
-          data: {
+      
+        this.props.dispatch({
+          type: 'ADD_MUSIC', payload: {
             username: username,
             song: song,
             artist: artist,
             album: album,
-          }
-       //data from local state to POST
-        }) //end axios
-          .then((response) => {// start .then
-            this.props.dispatch({ type: "FETCH_MUSIC" });
-          }) //end .then
-          .catch((error) => { //start .catchError
-            console.log(error);
-          }); //end .catchError
+          }})
         //success! Info POSTED to database
         swal("Thank you for your recommendation!", {
           icon: "success",
-        });
+        })
         //...else canceled
       } else {
         swal("Your recommendations submission was canceled!");

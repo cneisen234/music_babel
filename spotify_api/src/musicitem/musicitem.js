@@ -34,13 +34,10 @@ class MusicItem extends Component {
       // start .then
       //if confirmed, delete
           if(willDelete) {
-            console.log("this.props.musicitem.id", this.props.musicitem.id[0])
-            axios({
-              method: "DELETE",
-              url: `/music/${this.props.musicitem.id[0]}`,
-              //grabs id of component that we are interacting with
-        })
-        .then(function (response) {});
+
+            this.props.dispatch({
+              type: 'DELETE_MUSIC', payload: this.props.musicitem.id[0]
+            })
         //success! review deleted
         swal("Poof! Your recommendation has been deleted!", {
           icon: "success",
@@ -50,9 +47,6 @@ class MusicItem extends Component {
         swal("Your recommendation is safe!");
       }
       //reloads page after 1.5 seconds of deletion to reflect update on recommendations page
-      setTimeout(() => {
-        window.location.reload(false);
-      }, 1500);
     });
   }; //end deleteReview
 
@@ -77,24 +71,16 @@ class MusicItem extends Component {
       //end sweet alerts
     }).then((confirm) => {
       if (confirm) {
-        axios({
-          //start axios
-          method: "PUT",
-          url: `/music/${this.props.musicitem.id}`,
-          data: {
+        this.props.dispatch({
+          type: 'EDIT_MUSIC', payload: {
+            id: this.props.musicitem.id,
+            songData: {
             username: username,
             song: song,
             artist: artist,
             album: album,
-          },
-        }) //end axios
-          .then((response) => {
-            //start .then
-          }) //end .then
-          .catch((error) => {
-            //start .catchError
-            console.log(error);
-          }); //end .catchError
+          }},
+        })
           //saved edited changes
         swal("Your changes have been saved!", {
           icon: "success",
@@ -103,10 +89,7 @@ class MusicItem extends Component {
         //...else cancel
         swal("No changes were made!");
       }
-      //reloads page showing current info from database with newly flagged item
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      this.toggle();
     });
   };
   rate = (event) => {
@@ -128,21 +111,12 @@ class MusicItem extends Component {
       //end sweet alerts
     }).then((confirm) => {//start .then
       if (confirm) {
-        axios({ //start axios
-          method: "POST",
-          url: "/music/rate",
-          data: {
+        this.props.dispatch({
+          type: 'ADD_RATE', payload: {
             id: id[0],
             rate: rate,
           }
-          //data from local state to POST
-        }) //end axios
-          .then((response) => {// start .then
-            this.props.dispatch({ type: "FETCH_MUSIC" });
-          }) //end .then
-          .catch((error) => { //start .catchError
-            console.log(error);
-          }); //end .catchError
+        })
         //success! Info POSTED to database
         swal("Thank you for your rating!", {
           icon: "success",
@@ -165,11 +139,7 @@ class MusicItem extends Component {
   }; //end handleChange
   //toggles and sets input fields to value on clicked recommendation
   toggle = () => {
-    const { musicitem } = this.props;
     this.setState({
-      song: musicitem.song,
-      artist: musicitem.artist,
-      album: musicitem.album,
       toggle: !this.state.toggle,
     });
   };

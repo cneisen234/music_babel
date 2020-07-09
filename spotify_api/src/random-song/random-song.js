@@ -211,7 +211,7 @@ class RandomSong extends Component {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
 
-  addNewRecommendation = (event) => {
+  addRandomRecommendation = (event) => {
     //prevents default action
     event.preventDefault();
 
@@ -235,66 +235,39 @@ class RandomSong extends Component {
           this.randomSong();
           swal("Thank you for your feedback. Grabbing new random song now")
         } else {
-        axios({ //start axios
-          method: "POST",
-          url: "/music",
-          data: {
-            username: username,
-            song: this.state.randomSong.song,
-            artist: this.state.randomSong.artist,
-            album: this.state.randomSong.album,
-          }
-          //data from local state to POST
-        }) //end axios
-          .then((response) => {// start .then
-            this.props.dispatch({ type: "FETCH_MUSIC" });
-          }) //end .then
-          .catch((error) => { //start .catchError
-            console.log(error);
-          }); //end .catchError
+          this.props.dispatch({
+            type: 'ADD_MUSIC', payload: {
+              username: username,
+              song: this.state.randomSong.song,
+              artist: this.state.randomSong.artist,
+              album: this.state.randomSong.album,
+            }
+          })
         //success! Info POSTED to database
         swal("Glad to hear you liked this song. It will be saved to the recommendations list with your rating!", {
           icon: "success",
-        });
-        this.forceUpdate();
-        setTimeout(() => {
-          this.rate();
-        }, 1500);
+        }).then(() => {
+        
+          const { music } = this.props;
+          const { rate } = this.state
+          this.props.dispatch({
+            type: 'ADD_RATE', payload: {
+              id: this.props.music[this.props.music.length - 1] && this.props.music[this.props.music.length - 1].id[0],
+              rate: rate,
+            }
+          })
+
+          //resets local state
+          this.setState({
+            rate: null
+          })
+        })
       };
         //...else canceled
       } else {
         swal("Your rating submission was canceled!");
       }
     })
-  };
-
-
-  rate = (event) => {
-
-    //grabs all keys in Redux state
-    const { music } = this.props;
-    const { rate } = this.state
-        axios({ //start axios
-          method: "POST",
-          url: "/music/rate",
-          data: {
-            id: this.props.music[this.props.music.length - 1] && this.props.music[this.props.music.length - 1].id[0],
-            rate: rate,
-          }
-          //data from local state to POST
-        }) //end axios
-          .then((response) => {// start .then
-            this.props.dispatch({ type: "FETCH_MUSIC" });
-          }) //end .then
-          .catch((error) => { //start .catchError
-            console.log(error);
-          }); //end .catchError
-        
-    //resets local state
-    this.setState({
-      rate: null
-    })
-    this.forceUpdate();
   };
   render() {
     //grabs artists info from getRelatedArtists, saves to varable.
@@ -332,7 +305,7 @@ class RandomSong extends Component {
         <a href={this.state.randomSong.open} target="_blank">
           <button>Open this song in spotify</button>
         </a>
-        <form onSubmit={this.addNewRecommendation}>
+              <form onSubmit={this.addRandomRecommendation}>
           <Select
             style={{
               backgroundColor: "white",
