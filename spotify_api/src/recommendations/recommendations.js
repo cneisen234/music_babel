@@ -13,6 +13,8 @@ class Recommendations extends Component {
       artist: "",
       album: "",
       rate: null,
+      start: 0,
+      finish: 5,
   }
   //fetches music list from database on mount
   componentDidMount() {
@@ -76,6 +78,20 @@ class Recommendations extends Component {
       album: "",
     })
   };
+
+  next = () => {
+    this.setState({
+      start: this.state.start + 5,
+      finish: this.state.finish + 5,
+    })
+  }
+
+  previous = () => {
+    this.setState({
+      start: this.state.start - 5,
+      finish: this.state.finish - 5,
+    })
+  }
 
   
   // React render function
@@ -147,11 +163,19 @@ class Recommendations extends Component {
         )}
         <div>
               {/* map through entire data query */}
-              {this.props.music.map((musicitem) => {
+              {this.props.music.map((musicitem, index) => {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
+                if (index > this.state.start && index <= this.state.finish) {
                 return <MusicItem key={musicitem.id} musicitem={musicitem} />;
+                }
               })}
+              {this.state.start !== 0 && <button onClick={this.previous}>previous</button>}
+              {(this.state.start > this.props.music.length - 7) ? (
+                <span></span> 
+              ) : (
+                <button onClick={this.next}>Next</button>
+              )}
         </div>
       </div>
     ); //end return
