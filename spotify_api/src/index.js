@@ -136,6 +136,16 @@ function* fetchSearch() {
   }
 }
 
+function* postSearch(action) {
+  try {
+    const response = yield axios.post(`/music/search`, action.payload);
+    console.log("response.data", response.data)
+    yield put({ type: "SET_SEARCH", payload: response.data });
+  } catch (error) {
+    console.log("Error posting search:", error);
+  }
+}
+
 function* postMusic(action) {
   try {
     console.log(action.payload);
@@ -181,7 +191,7 @@ function* editMusic(action) {
 
 function* rootSaga() {
   yield takeEvery("FETCH_MUSIC", fetchMusic); //fetchMusic goes to FETCH_MUSIC
-  yield takeEvery("FETCH_SEARCH", fetchSearch); //fetchSearch goes to FETCH_SEARCH
+  yield takeEvery("POST_SEARCH", postSearch); //fetchSearch goes to FETCH_SEARCH
   yield takeEvery('ADD_MUSIC', postMusic); //postMusic goes to ADD_MUSIC
   yield takeEvery('ADD_RATE', postRate); //postRate goes to ADD_RATE
   yield takeEvery("DELETE_MUSIC", deleteMusic); //deleteMusic goes to DELETE_MUSIC

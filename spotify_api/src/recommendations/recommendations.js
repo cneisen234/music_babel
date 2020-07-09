@@ -16,11 +16,11 @@ class Recommendations extends Component {
       start: 0,
       finish: 5,
       toggle: false,
+      search: "",
   }
   //fetches music list from database on mount
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_MUSIC" });
-    this.props.dispatch({ type: "FETCH_SEARCH" });
   }
   //function to toggle
   toggle = () => {
@@ -78,6 +78,22 @@ class Recommendations extends Component {
       song: "",
       artist: "",
       album: "",
+    })
+  };
+
+  search = (event) => {
+    //prevents default action
+    event.preventDefault();
+    //grabs keys in local state
+    const { search } = this.state
+        this.props.dispatch({
+          type: 'POST_SEARCH', payload: {
+            search: search
+          }
+        })
+    //reset local state
+    this.setState({
+      search: ""
     })
   };
 
@@ -185,7 +201,25 @@ class Recommendations extends Component {
               )}
               </>
               ) : (
-                <span></span>
+              <>
+                <TextField
+                  variant="outlined"
+                  required
+                  label="Search"
+                  name="Search"
+                  // sets value of input to local state
+                  value={this.state.search}
+                  type="text"
+                  maxLength={1000}
+                  onChange={(event) => this.handleChange(event, "search")} //onChange of input values set local state
+                /><button onClick={this.search}>Search</button>
+                <button onClick={this.toggle}>Go Back</button>
+                {this.props.search.map((musicitem, index) => {
+                  // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
+                  // for each mapped item within it's designated component
+                    return <MusicItem key={musicitem.id} musicitem={musicitem} />;
+                })}
+              </>
               )}
         </div>
       </div>
@@ -196,6 +230,7 @@ class Recommendations extends Component {
 const mapStateToProps = (state) => ({
   errors: state.errors,
   music: state.music,
+  search: state.search,
   user: state.user,
 });
 export default connect(mapStateToProps)(Recommendations);
