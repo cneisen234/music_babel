@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Comments from "../comments/comments";
 import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import GradeIcon from '@material-ui/icons/Grade';
@@ -447,7 +448,7 @@ class MusicItem extends Component {
                   </form>
                   <table>
                     {musicitem.comment.map((comments, index) => {
-                      return <tr><td>{comments}</td></tr>;}
+                      return <Comments key={index} comments={comments}/>;}
                     )}
                   </table>
                     
