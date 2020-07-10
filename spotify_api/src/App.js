@@ -9,6 +9,7 @@ import RandomSong from "./random-song/random-song"
 import Recommendations from "./recommendations/recommendations"
 import { connect } from 'react-redux';
 import Header from "./Header/Header";
+import Footer from "./Footer/Footer";
 const spotifyWebApi = new Spotify();
 
 //main App component, this acts as the parent for all components on page
@@ -305,6 +306,7 @@ class App extends Component {
       </Grid>
         )}
     </Grid>
+    <Footer />
     </div>
   ); //end return
   } //end render

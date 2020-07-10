@@ -28,13 +28,24 @@ INSERT INTO "recommendation"
 VALUES
     ('Settle', 'Two Door Cinema Club', 'Beacon');
 
-    --to create comment table
+    --to create rate table
+CREATE TABLE "rate"
+(
+    "id" serial primary key,
+    "rate_id" INT REFERENCES "recommendation",
+    "rate" INT,
+    "created_at" TIMESTAMP,
+    "updated_at" TIMESTAMP
+); 
+
+
+--to create comment table
 CREATE TABLE "comment"
 (
     "id" serial primary key,
     "comment_id" INT REFERENCES "recommendation",
-    "comments" TEXT,
-    "rate" INT,
+    "usercomment" varchar(20),
+    "comment" TEXT,
     "created_at" TIMESTAMP,
     "updated_at" TIMESTAMP
 ); 

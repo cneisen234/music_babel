@@ -12,12 +12,15 @@ class MusicItem extends Component {
   state = {
     id: null,
     username: "",
+    usercomment: "",
     song: "",
     artist: "",
     album: "",
     toggle: false,
     toggle2: false,
-    rate: null
+    toggle3: false,
+    rate: null,
+    comment: ""
   }
   //deletes selected review
   deleteMusic = (event) => {
@@ -137,6 +140,53 @@ class MusicItem extends Component {
     })
   };
 
+  comment = (event) => {
+    //prevents default action
+    event.preventDefault();
+
+    //grabs keys in Redux state
+    const { id, song } = this.props.musicitem;
+    //grabs key in local state
+    const { comment } = this.state
+    //sweet alerts
+    swal({
+      //confirmation page exists in sweet alerts notification
+      title: "Confirm your comment",
+      text: `Please confirm your comment on ${song} below
+        ${comment}
+        click "ok" to confirm`,
+      icon: "info",
+      buttons: true,
+      dangerMode: true,
+      //end sweet alerts
+    }).then((confirm) => {//start .then
+      if (confirm) {
+        //runs axios request in sagas
+        this.props.dispatch({
+          type: 'ADD_COMMENT', payload: {
+            id: id[0],
+            usercomment: this.props.user.username,
+            comment: comment,
+          }
+        })
+        //success! Info POSTED to database
+        swal("Thank you for your comment!", {
+          icon: "success",
+        });
+        //...else canceled
+      } else {
+        swal("Your comment submission was canceled!");
+      }
+      //runs toggle3 to switchback to main view window on submission, switches back also at cancel
+      // this.toggle3();
+    })
+    //resets local state
+    this.setState({
+      comment: "",
+      usernamecomment: "",
+    })
+  };
+
   handleChange = (event, fieldName) => {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
@@ -150,6 +200,12 @@ class MusicItem extends Component {
   toggle2 = () => {
     this.setState({
       toggle2: !this.state.toggle2,
+    });
+  };
+  //toggle3 for switching back and forth from rating and mainscreen
+  toggle3 = () => {
+    this.setState({
+      toggle3: !this.state.toggle3,
     });
   };
   render() {
@@ -173,7 +229,7 @@ class MusicItem extends Component {
           {/* checked is user is logged in, rating, edit and delete only appear if user is logged in */}
         {this.props.user.username ? (
           // if toggle2 is false then render mainscreen
-        <td>{!this.state.toggle2 ? (
+            <td>{!this.state.toggle2 && this.props.user.username ? (
           <>
           {/* converts AVG rating from SQL to star rating posted to DOM */}
             <div className="rating" onClick={this.toggle2}><b>Average Rating:</b><Rating
@@ -252,6 +308,14 @@ class MusicItem extends Component {
          //...if user is not the one who made the recommendation, don't render delete or edit
          <span></span>
 )}
+          <td><Button
+            onClick={this.toggle3}
+            variant="contained"
+            color="secondary"
+            type="delete"
+          >
+            View Comments
+              </Button></td>
             {/* toggles edit window */}
                 {this.state.toggle === false ? (
                   //if toggle is false, render nothing. This is the default
@@ -334,6 +398,71 @@ class MusicItem extends Component {
             </button></td></Paper>
                 )}
 
+          {/* toggles comment window */}
+          {this.state.toggle3 === false ? (
+            //if toggle is false, render nothing. This is the default
+            <span></span>
+          ) : (
+              //...else render the edit screen for the selected song
+              <Paper
+                style={{
+                  left: 0,
+                  bottom: 0,
+                  position: "fixed",
+                  borderRadius: "10%",
+                  height: "800px",
+                  width: "400px",
+                  fontSize: "15px",
+                  backgroundColor: "white",
+                  zIndex: Infinity,
+                  overflow: "scroll",
+                }}
+                elevation="24"
+                className="loginBox"
+              ><td style={{
+                backgroundColor: "white",
+              }}> <form onSubmit={this.comment}>
+                    {/* album */}
+                    <TextField
+                      variant="outlined"
+                      required
+                      label="Comment"
+                      name="Comment"
+                      // sets value of input to local state
+                      value={this.state.comment}
+                      type="text"
+                      maxLength={1000}
+                      onChange={(event) => this.handleChange(event, "comment")} //onChange of input values set local state
+                    />
+                    <br />
+                    {/* onClick tied to form element, runs submitInfo on click */}
+                    <button
+                      className="recommendationButton"
+                      variant="contained"
+                      color="secondary"
+                      type="submit"
+                    >
+                      Comment
+            </button>
+                  </form>
+                  <table>
+                    {musicitem.comment.map((comments, index) => {
+                      return <tr><td>{comments}</td></tr>;}
+                    )}
+                  </table>
+                    
+                 
+                    
+                  <button
+                    onClick={this.toggle3}
+                    className="recommendationButton"
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                  >
+                    Go Back
+            </button></td></Paper>
+            )}
       </tr>
       </table>
     ); // end return

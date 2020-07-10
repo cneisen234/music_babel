@@ -9,7 +9,7 @@ const userStrategy = require("../strategies/user.strategy");
 
 //GET all recommendations
 router.get('/', (req, res) => {
-    pool.query('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, AVG(rate) as rate from "recommendation" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" GROUP BY recommendation.id;').then((result) => {
+    pool.query('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, array_agg(distinct "comment") as "comment", array_agg(usercomment) as usercomment, AVG(rate) as rate from "recommendation" LEFT JOIN "rate" ON "recommendation"."id"="rate"."rate_id" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id"GROUP BY recommendation.id ORDER BY recommendation.id;').then((result) => {
         res.send(result.rows);
     }).catch((error) => {
         console.log('Error GET /recommendations', error)
@@ -21,7 +21,7 @@ router.post("/search", (req, res) => {
     const  { search } = req.body
     console.log("search", search)
     //ILIKE on song, artist, and album for search query, plugs in user input into ILIKE
-    const queryText = ('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, AVG(rate) as rate from "recommendation" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" WHERE song ILIKE $1 OR artist ILIKE $1 OR album ILIKE $1 GROUP BY recommendation.id;')
+    const queryText = ('SELECT array_agg(distinct recommendation.id) as id, array_agg(distinct username) as username, array_agg(distinct song) as song, array_agg(distinct artist) as artist, array_agg(distinct album) as album, array_agg(distinct "comment") as "comment", array_agg(distinct usercomment) as usercomment, AVG(rate) as rate from "recommendation" LEFT JOIN "rate" ON "recommendation"."id"="rate"."rate_id" LEFT JOIN "comment" ON "recommendation"."id"="comment"."comment_id" WHERE song ILIKE $1 OR artist ILIKE $1 OR album ILIKE $1 GROUP BY recommendation.id;')
     pool
         .query(queryText, [`%${search}%`])
     .then((result) => {
@@ -71,10 +71,37 @@ router.post("/rate", rejectUnauthenticated, (req, res) => {
     }
 
     const queryText = `
-        INSERT INTO comment (comment_id, rate) 
+        INSERT INTO rate (rate_id, rate) 
         VALUES ($1, $2);`; //grabs database
     pool
         .query(queryText, [id, rate])
+        .then(function (result) {
+            // result.rows: 'INSERT 0 1';
+            // it worked!
+            res.sendStatus(200); // 200: OK
+        })
+        .catch(function (error) {
+            console.log("Sorry, there was an error with your query: ", error);
+            res.sendStatus(500); // HTTP SERVER ERROR
+        });
+}); // end POST
+
+//POST a new comment
+router.post("/comment", rejectUnauthenticated, (req, res) => {
+    // HTTP REQUEST BODY
+    const music = req.body; // pull the object out out of the HTTP REQUEST
+    const { id, comment, usercomment } = music
+    if (music === undefined) {
+        // stop, dont touch the database
+        res.sendStatus(400); // 400 BAD REQUEST
+        return;
+    }
+
+    const queryText = `
+        INSERT INTO comment (comment_id, usercomment, comment) 
+        VALUES ($1, $2, $3);`; //grabs database
+    pool
+        .query(queryText, [id, usercomment, comment])
         .then(function (result) {
             // result.rows: 'INSERT 0 1';
             // it worked!

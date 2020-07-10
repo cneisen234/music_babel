@@ -182,13 +182,13 @@ class Recommendations extends Component {
             </Grid>
         </form>
         {/* onClick search from display view to search view */}
-        <button onClick={this.toggle}>Search</button>
         </>
         )}
         <div>
               {/* map through entire data query */}
               {this.state.toggle === false ? (
                 <>
+              <button onClick={this.toggle}>Search</button>
               {this.props.music.map((musicitem, index) => {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component

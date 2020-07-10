@@ -150,10 +150,21 @@ function* postMusic(action) {
 }
 
 function* postRate(action) {
-  //runs PUT on path /music/rate to place a rating on a song in database
+  //runs POST on path /music/rate to place a rating on a song in database
   try {
     console.log(action.payload);
     yield axios.post(`/music/rate`, action.payload);
+    yield put({ type: "FETCH_MUSIC" });
+  } catch (error) {
+    console.log("Error deleting recommendation:", error);
+  }
+}
+
+function* postComment(action) {
+  //runs POST on path /music/rate to place a rating on a song in database
+  try {
+    console.log(action.payload);
+    yield axios.post(`/music/comment`, action.payload);
     yield put({ type: "FETCH_MUSIC" });
   } catch (error) {
     console.log("Error deleting recommendation:", error);
@@ -190,6 +201,7 @@ function* rootSaga() {
   yield takeEvery("POST_SEARCH", postSearch); //postSearch goes to POST_SEARCH
   yield takeEvery('ADD_MUSIC', postMusic); //postMusic goes to ADD_MUSIC
   yield takeEvery('ADD_RATE', postRate); //postRate goes to ADD_RATE
+  yield takeEvery('ADD_COMMENT', postComment); //postRate goes to ADD_RATE
   yield takeEvery("DELETE_MUSIC", deleteMusic); //deleteMusic goes to DELETE_MUSIC
   yield takeEvery("EDIT_MUSIC", editMusic); //editMusic goes to EDIT_MUSIC
     yield takeLatest("REGISTER", registerUser); //register goes to REGISTER
