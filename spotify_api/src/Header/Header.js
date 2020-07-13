@@ -73,6 +73,26 @@ class Header extends Component {
       this.props.dispatch({ type: "LOGIN_INPUT_ERROR" });
     }
   };
+
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      if (this.state.username && this.state.password) {
+        this.props.dispatch({
+          type: "LOGIN",
+          payload: {
+            username: this.state.username,
+            password: this.state.password,
+          },
+        });
+        this.setState({
+          username: "",
+          password: "",
+        })
+      } else {
+        //error at login
+        this.props.dispatch({ type: "LOGIN_INPUT_ERROR" });
+      }
+    }}
   //sets input values to local state
   handleInputChangeFor = (propertyName) => (event) => {
     this.setState({
@@ -139,7 +159,7 @@ class Header extends Component {
             <>
               <h4 className="App-title">Login:</h4>
               {/* login form */}
-              <form onSubmit={this.login}>
+              <form onSubmit={this.login} onKeyPress={this.handleKeyPress}>
                 {/* username */}
                       <Paper style={{
                         height: "5%",

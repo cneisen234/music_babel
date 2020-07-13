@@ -83,7 +83,6 @@ class Recommendations extends Component {
       album: "",
     })
   };
-
   search = (event) => {
     //prevents default action
     event.preventDefault();
@@ -100,6 +99,70 @@ class Recommendations extends Component {
       search: ""
     })
   };
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      //grabs keys in local state
+      const { search } = this.state
+      //runs axios request in sagas
+      this.props.dispatch({
+        type: 'POST_SEARCH', payload: {
+          search: search
+        }
+      })
+      //reset local state
+      this.setState({
+        search: ""
+      })
+    }
+  }
+  handleKeyPress2 = (event) => {
+    if (event.key === 'Enter') {
+      //grabs all keys in Redux state
+      const { username, profile_pic } = this.props.user;
+      //grabs keys in local state
+      const { song, artist, album } = this.state
+      //sweet alerts
+      swal({
+        //confirmation page exists in sweet alerts notification
+        title: "Confirm your recommendation",
+        text: `${this.props.user.username}'s recommendation
+        Song: ${song}
+        Artist: ${artist}
+        Album: ${album}
+        click "ok" to confirm`,
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+        //end sweet alerts
+      }).then((confirm) => {//start .then
+        if (confirm) {
+          //runs axios request in sagas
+          this.props.dispatch({
+            type: 'ADD_MUSIC', payload: {
+              username: username,
+              profile_pic: profile_pic,
+              song: song,
+              artist: artist,
+              album: album,
+            }
+          })
+          //success! Info POSTED to database
+          swal("Thank you for your recommendation!", {
+            icon: "success",
+          })
+          //...else canceled
+        } else {
+          swal("Your recommendations submission was canceled!");
+        }
+      })
+      //reset local state
+      this.setState({
+        song: "",
+        artist: "",
+        album: "",
+      })
+    }
+  }
   //sets state of start and finish to +5 to generate next 5 items
   next = () => {
     this.setState({
@@ -114,7 +177,6 @@ class Recommendations extends Component {
       finish: this.state.finish - 5,
     })
   }
-
   
   // React render function
   render() {
@@ -127,7 +189,10 @@ class Recommendations extends Component {
         ) : (
           //is the user logged in? If so, render
           <>
-        <form onSubmit={this.addNewRecommendation}>
+              {this.state.toggle === false ? ( 
+                <>
+          <div className="App-title" style={{color: "white"}}>Recommend a song by filling in the field below and pressing "Add New Recommendation" or pushing the "enter" key</div>
+        <form id="addNewRecommendation" onSubmit={this.addNewRecommendation} onKeyPress={this.handleKeyPress2}>
               <Grid container spacing={1}>
                 <Grid container item md={12} lg={4}>
           {/* song */}
@@ -172,17 +237,12 @@ class Recommendations extends Component {
           />
           </Grid>
           </Grid>
-              {/* onClick tied to form element, runs addNewRecommendation on click */}
-              <Grid container spacing={1}>
-            <Grid container item md={12}>
-          <button
-            type="submit"
-          >
-            Add recommendation
-            </button>
-            </Grid>
-            </Grid>
+                <button type="submit">Add New Recommendation</button>
         </form>
+        </>
+        ) : (
+          <span></span>
+        )}
         {/* onClick search from display view to search view */}
         </>
         )}
@@ -190,12 +250,12 @@ class Recommendations extends Component {
               {/* map through entire data query */}
               {this.state.toggle === false ? (
                 <>
-              <button onClick={this.toggle}>Search</button>
+              <button onClick={this.toggle}>Switch to Search</button>
               {this.props.music.map((musicitem, index) => {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
                 // also only renders items that are inbetween the index of start and finish in state
-                if (index >= this.state.start && index <= this.state.finish) {
+                if (index >= this.state.start && index < this.state.finish) {
                 return <MusicItem key={musicitem.id} musicitem={musicitem} />;
                 }
               })}
@@ -205,13 +265,15 @@ class Recommendations extends Component {
               {(this.state.start > this.props.music.length - 7) ? (
                 <span></span> 
               ) : (
-                <button onClick={this.next}>Next</button>
+                  <button onClick={this.next}>Next</button>
               )}
               </>
               ) : (
               <>
+                <div className="App-title" style={{ color: "white" }}>Search for a song by filling in the field below and pressing "search" or by pressing the "enter" key</div>
               {/* search box */}
                 <TextField
+                  onKeyPress={this.handleKeyPress}
                   variant="outlined"
                   required
                   label="Search"

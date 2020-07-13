@@ -188,7 +188,93 @@ class MusicItem extends Component {
       usernamecomment: "",
     })
   };
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      //grabs keys in Redux state
+      const { id, song } = this.props.musicitem;
+      //grabs key in local state
+      const { comment } = this.state
+      //sweet alerts
+      swal({
+        //confirmation page exists in sweet alerts notification
+        title: "Confirm your comment",
+        text: `Please confirm your comment on ${song} below
+        ${comment}
+        click "ok" to confirm`,
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+        //end sweet alerts
+      }).then((confirm) => {//start .then
+        if (confirm) {
+          //runs axios request in sagas
+          this.props.dispatch({
+            type: 'ADD_COMMENT', payload: {
+              id: id[0],
+              usercomment: this.props.user.username,
+              comment: this.props.user.username + ": " + comment,
+            }
+          })
+          //success! Info POSTED to database
+          swal("Thank you for your comment!", {
+            icon: "success",
+          });
+          //...else canceled
+        } else {
+          swal("Your comment submission was canceled!");
+        }
+        //runs toggle3 to switchback to main view window on submission, switches back also at cancel
+        // this.toggle3();
+      })
+      //resets local state
+      this.setState({
+        comment: "",
+        usernamecomment: "",
+      })
+    }}
 
+  handleKeyPress2 = (event) => {
+    if (event.key === 'Enter') {
+      const { username } = this.props.user;
+      const { song, artist, album } = this.state
+      //sweet alerts
+      swal({
+        title: "Save changes?",
+        text: `${this.props.user.username}'s recommendation:
+      review changes to entry below
+        Song: ${ song}
+        Artist: ${ artist}
+        Album: ${ album}
+        click "ok" to confirm`,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        //end sweet alerts
+      }).then((confirm) => {
+        if (confirm) {
+          //runs axios request in sagas
+          this.props.dispatch({
+            type: 'EDIT_MUSIC', payload: {
+              id: this.props.musicitem.id,
+              songData: {
+                username: username,
+                song: song,
+                artist: artist,
+                album: album,
+              }
+            },
+          })
+          //saved edited changes
+          swal("Your changes have been saved!", {
+            icon: "success",
+          });
+        } else {
+          //...else cancel
+          swal("No changes were made!");
+        }
+        this.toggle();
+      });
+    }}
   handleChange = (event, fieldName) => {
     this.setState({ [fieldName]: event.target.value }); //sets to value of targeted event
   }; //end handleChange
@@ -343,7 +429,7 @@ class MusicItem extends Component {
               className="loginBox"
               ><td style={{
                 backgroundColor: "white",
-              }}> <form onSubmit={this.editRecommendation}>
+              }}> <form onSubmit={this.editRecommendation} onKeyPress={this.handleKeyPress2}>
                 {/* song */}
           <TextField
             variant="outlined"
@@ -429,7 +515,7 @@ class MusicItem extends Component {
                 backgroundColor: "white",
               }}> 
                   {this.props.user.username ? (
-              <form onSubmit={this.comment}>
+              <form onSubmit={this.comment} onKeyPress={this.handleKeyPress}>
                     {/* album */}
                     <TextField
                       variant="outlined"
