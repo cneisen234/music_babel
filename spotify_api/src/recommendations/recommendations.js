@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
 import MusicItem from "../musicitem/musicitem"
 import swal from "sweetalert";
-import axios from "axios";
+
 
 class Recommendations extends Component {
   //local state
   state = {
       id: null,
       username: "",
+      profilePic: "https://groovesharks.org/assets/images/default_avatar.jpg",
       song: "",
       artist: "",
       album: "",
@@ -39,7 +40,7 @@ class Recommendations extends Component {
     event.preventDefault();
     
     //grabs all keys in Redux state
-    const { username } = this.props.user;
+    const { username, profile_pic } = this.props.user;
     //grabs keys in local state
     const { song, artist, album } = this.state 
     //sweet alerts
@@ -61,6 +62,7 @@ class Recommendations extends Component {
         this.props.dispatch({
           type: 'ADD_MUSIC', payload: {
             username: username,
+            profile_pic: profile_pic,
             song: song,
             artist: artist,
             album: album,
@@ -193,7 +195,7 @@ class Recommendations extends Component {
                 // create MusicItem component for each mapped item, pass musicitem in as props, this gives us access to everything
                 // for each mapped item within it's designated component
                 // also only renders items that are inbetween the index of start and finish in state
-                if (index > this.state.start && index <= this.state.finish) {
+                if (index >= this.state.start && index <= this.state.finish) {
                 return <MusicItem key={musicitem.id} musicitem={musicitem} />;
                 }
               })}

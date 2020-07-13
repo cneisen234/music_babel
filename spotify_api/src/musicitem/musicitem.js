@@ -6,6 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import GradeIcon from '@material-ui/icons/Grade';
 import EditIcon from '@material-ui/icons/Edit';
 import Rating from '@material-ui/lab/Rating';
+import LockIcon from '@material-ui/icons/Lock';
 import swal from "sweetalert";
 
 class MusicItem extends Component {
@@ -167,7 +168,7 @@ class MusicItem extends Component {
           type: 'ADD_COMMENT', payload: {
             id: id[0],
             usercomment: this.props.user.username,
-            comment: comment,
+            comment: this.props.user.username + ": " + comment,
           }
         })
         //success! Info POSTED to database
@@ -221,7 +222,7 @@ class MusicItem extends Component {
       <table>
       <tr>
         {/* table data for each mapped item */}
-        <td><b>Posted by:</b><br /> {musicitem.username}</td>
+        <td><b>Posted by:</b> {musicitem.username}<br /><img className="profilePic" src={musicitem.profile_pic}/></td>
         <td><b>Title:</b><br />{musicitem.song}</td>
         <td><b>Artist:</b><br />{musicitem.artist}</td>
         <td><b>Album:</b><br />{musicitem.album}</td>
@@ -280,7 +281,7 @@ class MusicItem extends Component {
           </td>
         ) : (
           //...if user is not logged in, render nothing
-          <span></span>
+          <td><LockIcon /></td>
         )}
         {/* is the logged in user the one who posted recommendation? If so, display options to edit and delete */}
        {this.props.user.username == musicitem.username ? (
@@ -307,7 +308,10 @@ class MusicItem extends Component {
                 </>
        ) : (
          //...if user is not the one who made the recommendation, don't render delete or edit
-         <span></span>
+         <>
+              <td><LockIcon /></td>
+              <td><LockIcon /></td>
+              </>
 )}
           <td><Button
             onClick={this.toggle3}
@@ -411,18 +415,21 @@ class MusicItem extends Component {
                   bottom: 0,
                   position: "fixed",
                   borderRadius: "10%",
-                  height: "800px",
-                  width: "400px",
+                  height: "600px",
+                  width: "350px",
                   fontSize: "15px",
                   backgroundColor: "white",
-                  zIndex: Infinity,
+                  zIndex: 10000000000000,
                   overflow: "scroll",
+
                 }}
                 elevation="24"
                 className="loginBox"
               ><td style={{
                 backgroundColor: "white",
-              }}> <form onSubmit={this.comment}>
+              }}> 
+                  {this.props.user.username ? (
+              <form onSubmit={this.comment}>
                     {/* album */}
                     <TextField
                       variant="outlined"
@@ -446,14 +453,9 @@ class MusicItem extends Component {
                       Comment
             </button>
                   </form>
-                  <table>
-                    {musicitem.comment.map((comments, index) => {
-                      return <Comments key={index} comments={comments}/>;}
-                    )}
-                  </table>
-                    
-                 
-                    
+                  ) : (
+                    <span></span>
+                  )}
                   <button
                     onClick={this.toggle3}
                     className="recommendationButton"
@@ -462,7 +464,16 @@ class MusicItem extends Component {
                     type="submit"
                   >
                     Go Back
-            </button></td></Paper>
+            </button>
+                  <table>
+                    {musicitem.comment.map((comments, index) => {
+                      return <Comments key={index} comments={comments}/>;}
+                    )}
+                  </table>
+                    
+                 
+                    
+                 </td></Paper>
             )}
       </tr>
       </table>

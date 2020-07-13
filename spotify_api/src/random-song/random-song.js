@@ -218,7 +218,7 @@ class RandomSong extends Component {
     event.preventDefault();
 
     //grabs all keys in Redux state
-    const { username } = this.props.user;
+    const { username, profile_pic } = this.props.user;
     const { song } = this.state.randomSong
     //sweet alerts
     swal({
@@ -240,6 +240,7 @@ class RandomSong extends Component {
           this.props.dispatch({
             type: 'ADD_MUSIC', payload: {
               username: username,
+              profile_pic: profile_pic,
               song: this.state.randomSong.song,
               artist: this.state.randomSong.artist,
               album: this.state.randomSong.album,
@@ -254,7 +255,7 @@ class RandomSong extends Component {
           const { rate } = this.state
           this.props.dispatch({
             type: 'ADD_RATE', payload: {
-              id: this.props.music[this.props.music.length - 1] && this.props.music[this.props.music.length - 1].id[0],
+              id: music[music.length - 1] && music[music.length - 1].id[0],
               rate: rate,
             }
           })

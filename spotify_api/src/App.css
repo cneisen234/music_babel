@@ -1,6 +1,7 @@
 .App {
   /*default text for all of App to center*/
   text-align: center;
+  width: 100%;
 }
 /*all photos of random background*/
 .photo0 {
@@ -119,7 +120,17 @@ td {
     border-color: white; 
     padding: 10px;
 }
-               
+li {
+  list-style-type: none;
+}     
+.profilePicUploader {
+  font-size: 18px
+}
+.profilePic {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+}      
 .App-title {
   /*styles for App-title, used for a backdrop for the header text at login*/
   background-color: black;

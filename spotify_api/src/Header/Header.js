@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { TextField, Button, Paper } from "@material-ui/core";
+import ReactFilestack from 'filestack-react';
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
@@ -14,6 +15,7 @@ class Header extends Component {
     toggle: false,
     username: "",
     password: "",
+    profilePic: "https://groovesharks.org/assets/images/default_avatar.jpg",
     background: "",
   };
   componentDidMount() {
@@ -35,6 +37,7 @@ class Header extends Component {
         payload: {
           username: this.state.username,
           password: this.state.password,
+          profilePic: this.state.profilePic,
         },
       });
       //toggles back to login when registered
@@ -216,13 +219,19 @@ class Header extends Component {
                 />
                 <br />
                 {/* profile pic */}
-                <TextField
-                  type="text"
-                  placeholder="profile pic"
-                  label="profile pic"
-                  name="profile pic"
-                  className="input"
-                />
+                        {/* <Button variant="contained"
+                          color="secondary"
+                          onClick={() => this.uploadImg()}>Upload profile pic</Button> */}
+                        <ReactFilestack
+                          apikey={'AkS9hL8R9Tu1Pep8RcLwEz'}
+                          componentDisplayMode={{
+                            customText: 'Upload profile picture',
+                            customClass: "profilePicUploader"
+                          }}
+                          onSuccess={(res) => this.setState({
+                            profilePic: res.filesUploaded[0].url
+                          })}
+                        />
                 <br />
                 {/* register */}
                 <Button

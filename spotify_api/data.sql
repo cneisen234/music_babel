@@ -16,6 +16,7 @@ CREATE TABLE "recommendation"
     "id" serial primary key,
     "user_id" INT REFERENCES "user",
     "username" varchar(15),
+    "profile_pic" TEXT,
     "song" varchar(255) not null,
     "artist" varchar(255) not null,
     "album" varchar(255) not null,

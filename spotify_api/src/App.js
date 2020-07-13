@@ -14,10 +14,15 @@ const spotifyWebApi = new Spotify();
 
 //main App component, this acts as the parent for all components on page
 class App extends Component {
-  state = {
+  constructor() {
+    super();
+    //saves getHashParams in params varable
+    const params = this.getHashParams();
+  this.state = {
     toggle: false,
     toggle2: false,
     //state that houses current playing values grabbed from spotify
+    loggedIn: params.access_token ? true : false,
     nowPlaying: {
       song: "",
       artist: "",
@@ -25,6 +30,22 @@ class App extends Component {
       image:
         "https://image.shutterstock.com/image-vector/music-note-icon-vector-260nw-415866139.jpg",
     },
+  }
+    //if no access token exists, refresh token
+    if (params.access_token) {
+      spotifyWebApi.setAccessToken(params.access_token);
+    }
+  }
+  //generates new token
+  getHashParams() {
+    var hashParams = {};
+    var e,
+      r = /([^&;=]+)=?([^&;]*)/g,
+      q = window.location.hash.substring(1);
+    while ((e = r.exec(q))) {
+      hashParams[e[1]] = decodeURIComponent(e[2]);
+    }
+    return hashParams;
   }
   componentDidMount() {
     //fetches user info on mount from login info, ensures we don't lose user info on refresh
@@ -91,7 +112,7 @@ class App extends Component {
     event.preventDefault();
 
     //grabs all keys in Redux state
-    const { username } = this.props.user;
+    const { username, profile_pic } = this.props.user;
     //grabs keys in local state
     const { song, artist, album } = this.state.nowPlaying
     //sweet alerts
@@ -112,6 +133,7 @@ class App extends Component {
         this.props.dispatch({
           type: 'ADD_MUSIC', payload: {
             username: username,
+            profile_pic: profile_pic,
             song: song,
             artist: artist,
             album: album,
@@ -155,8 +177,8 @@ class App extends Component {
                 top: 0,
                 position: "fixed",
                 borderRadius: "10%",
-                height: "600px",
-                width: "400px",
+                height: "650px",
+                width: "500px",
                 fontSize: "15px",
                 zIndex: 10000,
               }}
@@ -165,6 +187,9 @@ class App extends Component {
             >
               
               {/* populates with current playing info */}
+              {/* user currently signed in */}
+              <table><tr><td className="name">Hello: {this.props.user.username}</td>
+                <td><img className="profilePic" src={this.props.user.profile_pic}></img></td></tr></table>
               <table>
                 <tr>
                   <td>
@@ -204,10 +229,8 @@ class App extends Component {
                   </td>
                 </tr>
               </table>
-              {/* user currently signed in */}
-              <p className="name">Hello: {this.props.user.username}</p>
               {/* button to log in with spotify, takes you to spotify web api server used for log in */}
-              <a href="http://localhost:8888">
+              <br /><a href="http://localhost:8888">
                 <button variant="contained" color="secondary">
                   Link to Spotify
                 </button>
@@ -274,36 +297,33 @@ class App extends Component {
         //...else if user is not logged in, render nothing
           <span></span>
         )}
-      <Header /> {/*Header page which includes login */}
+      <Header/> {/*Header page which includes login */}
       {/* grid layout for mobile friendly, fits screensize */}
-      <Grid container spacing={1}>
-        <Grid container item md={12} lg={6}>
-          {/* toggles recommendation page on and off */}
-      <Button
-        onClick={this.toggle}
-        className="feedbackButton"
-        variant="contained"
-        color="primary"
-        type="submit"
-      >
-        <h1>Recommendations</h1>
-            </Button>
-            {this.state.toggle === false ? (
-              //if toggle is false, render nothing, this is the default
-              <span></span>
-            ) : (
-              //...else if true, render Recommendations component
-      <Recommendations /> 
-              
-        )} {/*...end Recommendations page */}
+      <Grid container spacing={1} style={{display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",}}>
+        {this.state.toggle === false ? (
+          <>
+          <button onClick={this.toggle}>Go to Random Song</button><br />
+        <Grid container item md={12}>
+      <Recommendations /> {/*...end Recommendations page */}
         </Grid>
+        </>
+        ) : (
+          <>
         {!this.props.user.username ? (
           //can only generate a random song if logged in
-          <span></span>
+          <p>Please log in and link to your spotify in order to use this feature</p>
         ) : (
-        <Grid container item md={12} lg={6}>
-      <RandomSong /> {/*RandomSong page */}
+          <>
+                  <button onClick={this.toggle}>Go to Recommendations</button><br />
+        <Grid container item md={12}>
+                      <RandomSong/> {/*RandomSong page */}
       </Grid>
+      </>
+        )}
+        </>
         )}
     </Grid>
     <Footer />
