@@ -132,6 +132,19 @@ class Header extends Component {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
+          {/* user currently signed in */}
+          {this.props.user.username ? (
+          <table style={{
+         width: "50%",
+            position: "absolute",
+            left: 60,
+            top: 40,
+            borderColor: "white"
+          }}><tr><td className="name">Hello: {this.props.user.username}</td>
+            <td><img className="profilePic" src={this.props.user.profile_pic}></img></td></tr></table>
+          ) : (
+            <span></span>
+          )}
           {/* Title headers that appear at top of page */}
           <h1 className="App-title">Music Babel</h1>
           <h3 className="App-title">Your place for music community</h3>

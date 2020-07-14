@@ -177,8 +177,8 @@ class App extends Component {
                 top: 0,
                 position: "fixed",
                 borderRadius: "10%",
-                height: "650px",
-                width: "500px",
+                height: "500px",
+                width: "350px",
                 fontSize: "15px",
                 zIndex: 10000,
               }}
@@ -187,9 +187,6 @@ class App extends Component {
             >
               
               {/* populates with current playing info */}
-              {/* user currently signed in */}
-              <table><tr><td className="name">Hello: {this.props.user.username}</td>
-                <td><img className="profilePic" src={this.props.user.profile_pic}></img></td></tr></table>
               <table>
                 <tr>
                   <td>
@@ -247,13 +244,15 @@ class App extends Component {
                 <span></span>
               ) : (
                 // will add current listening song to recommendations list
+                <>
+                <br />
               <button
                 variant="contained"
                 color="secondary"
                 onClick={this.addCurrentToRecommendation}
               >
                 Recommend this song?
-              </button>
+              </button></>
               )}
 
               <br />
