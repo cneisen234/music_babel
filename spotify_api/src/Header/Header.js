@@ -5,12 +5,10 @@ import ReactFilestack from 'filestack-react';
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
-//define class of new Spotify into spotifyWebApi
-const spotifyWebApi = new Spotify();
 
 // Header is a controlled component that renders the header of the site
 class Header extends Component {
-  //local state for toggle and user inputs at login and registeration
+  //local state user inputs at login and registeration
   state = {
     toggle: false,
     username: "",
@@ -19,7 +17,7 @@ class Header extends Component {
     background: "",
   };
   componentDidMount() {
-    //selected a random photo class
+    //select a random photo class
     const randomPhoto = "photo" + Math.floor(Math.random() * 11);
     this.setState({
       background: randomPhoto,
@@ -73,8 +71,9 @@ class Header extends Component {
       this.props.dispatch({ type: "LOGIN_INPUT_ERROR" });
     }
   };
-
+  //ties login function to enter key press
   handleKeyPress = (event) => {
+    //on enter run this function
     if (event.key === 'Enter') {
       if (this.state.username && this.state.password) {
         this.props.dispatch({
@@ -111,6 +110,7 @@ class Header extends Component {
     })
       .then((willLogout) => {
         if (willLogout) {
+          //routes to logout in sagas
           this.props.dispatch({ type: "LOGOUT" })  
           swal("Logout successful", {
             icon: "success",
@@ -132,7 +132,7 @@ class Header extends Component {
     return (
       <div className="App" className={this.state.background}>
         <header className="App-header">
-          {/* user currently signed in */}
+          {/* is the user currently signed in? */}
           {this.props.user.username ? (
           <table style={{
          width: "50%",
@@ -252,9 +252,7 @@ class Header extends Component {
                 />
                 <br />
                 {/* profile pic */}
-                        {/* <Button variant="contained"
-                          color="secondary"
-                          onClick={() => this.uploadImg()}>Upload profile pic</Button> */}
+                        {/* uses filestack for photo uploads */}
                         <ReactFilestack
                           apikey={'AkS9hL8R9Tu1Pep8RcLwEz'}
                           componentDisplayMode={{
@@ -262,6 +260,7 @@ class Header extends Component {
                             customClass: "profilePicUploader"
                           }}
                           onSuccess={(res) => this.setState({
+                            //path for uploaded photo to display on dom
                             profilePic: res.filesUploaded[0].url
                           })}
                         />
@@ -292,9 +291,9 @@ class Header extends Component {
         </header>
         <br />
       </div>
-    );
-  }
-}
+    ); //end return
+  }//end render
+}//end Header
 // redux state
 const mapStateToProps = (state) => ({
   errors: state.errors,

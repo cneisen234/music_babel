@@ -4,8 +4,6 @@ const pool = require('../modules/pool');
 const {
     rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
-const encryptLib = require("../modules/encryption");
-const userStrategy = require("../strategies/user.strategy");
 
 //GET all recommendations
 router.get('/', (req, res) => {
@@ -113,11 +111,9 @@ router.post("/comment", rejectUnauthenticated, (req, res) => {
         });
 }); // end POST
 
-//DELETES entry from admin page
+//DELETES entry from recommendation list
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
     let id = req.params.id; // id of the thing to delete
-
-    /* if (session.id !== database.id) {sendStatus(403) return;}*/
     let queryText = `SELECT * FROM recommendation WHERE id=$1`; //grabs specific item to grab the item user_id
     const queryValue = [id];
     pool
@@ -146,7 +142,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
         });
 }); //end DELETE
 
-//PUT to flag for review
+//PUT to edit song
 router.put("/:id", rejectUnauthenticated, (req, res) => {
     let id = req.params.id; // grabs id and places it in path
     const music = req.body; // pull the object out out of the HTTP REQUEST
@@ -157,7 +153,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
         .query(queryText, [song, artist, album, username, id])
 
         .then(function (result) {
-            console.log("Update feedback item for id of", id);
+            console.log("Update entry item for id of", id);
             // it worked!
             res.send(result.rows);
         })

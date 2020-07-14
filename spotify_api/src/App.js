@@ -3,7 +3,7 @@ import './App.css';
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
-import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
+import { Paper, Grid } from "@material-ui/core";
 //define class of new Spotify into spotifyWebApi
 import RandomSong from "./random-song/random-song"
 import Recommendations from "./recommendations/recommendations"
@@ -57,11 +57,10 @@ class App extends Component {
     this.setState({
       background: randomPhoto,
     });
-    //reruns nowPlaying and forces an update every 20 seconds to keep current song displaying
+    //reruns nowPlaying and forces an update every 10 seconds to keep current song displaying
     setInterval(() => {
       this.getNowPlaying();
       this.forceUpdate();
-      console.log("force rerender");
     }, 10000);
   }
   getNowPlaying() {
@@ -307,8 +306,7 @@ class App extends Component {
           <br />
           <button onClick={this.toggle}>Go to Random Song</button><br />
         <Grid container item md={12}>
-      <Recommendations /> 
-      {/*...end Recommendations page */}
+              <Recommendations />   {/*Recommendations page */}
         </Grid>
         </>
         ) : (
@@ -325,11 +323,11 @@ class App extends Component {
           <br />
                   <button onClick={this.toggle}>Go to Recommendations</button><br />
         <Grid container item md={12}>
-                      <RandomSong/> 
+                      <RandomSong /> {/*RandomSong page */}
                       <br />
                       <br />
                       <br />
-                      <br />{/*RandomSong page */}
+                      <br />
       </Grid>
       </>
         )}

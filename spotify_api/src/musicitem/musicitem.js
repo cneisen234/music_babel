@@ -188,7 +188,9 @@ class MusicItem extends Component {
       usernamecomment: "",
     })
   };
+  //ties comment function to enter key
   handleKeyPress = (event) => {
+    //on enter run this function
     if (event.key === 'Enter') {
       //grabs keys in Redux state
       const { id, song } = this.props.musicitem;
@@ -232,10 +234,13 @@ class MusicItem extends Component {
         usernamecomment: "",
       })
     }}
-
+    //ties enter key to addNewRecommendation function
   handleKeyPress2 = (event) => {
+    //on enter, run this function
     if (event.key === 'Enter') {
+      //grabs keys in Redux state
       const { username } = this.props.user;
+      //grabs keys in local state
       const { song, artist, album } = this.state
       //sweet alerts
       swal({
@@ -531,7 +536,6 @@ class MusicItem extends Component {
                     <br />
                     {/* onClick tied to form element, runs submitInfo on click */}
                     <button
-                      className="recommendationButton"
                       variant="contained"
                       color="secondary"
                       type="submit"
@@ -542,15 +546,16 @@ class MusicItem extends Component {
                   ) : (
                     <span></span>
                   )}
+                  {/* runs toggle3 to toggle comment window */}
                   <button
                     onClick={this.toggle3}
-                    className="recommendationButton"
                     variant="contained"
                     color="secondary"
                     type="submit"
                   >
                     Go Back
             </button>
+            {/* maps through comments array of each musicItem component */}
                   <table>
                     {musicitem.comment.map((comments, index) => {
                       return <Comments key={index} comments={comments}/>;}

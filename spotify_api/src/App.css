@@ -77,8 +77,8 @@
   background-size: cover;
   z-index: -5;
 } 
-/*styles for all tables, used mainly for the recommendations layout*/
 table{
+  /*styles for all tables, used mainly for the recommendations layout*/
   margin-left:auto; 
     margin-right:auto;
     margin-top: 20px;
@@ -86,8 +86,8 @@ table{
     border-radius: 15px;
     width: 100%;
 }
-/*table styles and colors*/
 td {
+  /*table styles and colors*/
      background-color: black;
   color: white;
   margin-left: 3%;
@@ -121,12 +121,15 @@ td {
     padding: 10px;
 }
 li {
+  /*set all list items to a list style of none*/
   list-style-type: none;
 }     
 .profilePicUploader {
+  /*sets font size of the button clicked to upload photo*/
   font-size: 18px
 }
 .profilePic {
+  /*size of profile pics, also turns it into a circle*/
   width: 100px;
   height: 100px;
   border-radius: 100px;
@@ -161,7 +164,7 @@ li {
 }
 
 div, button {
-  /*used to give other google font style to other elements, also default margin of 15px*/
+  /*used to give other google font style to other elements*/
   font-family: 'Gloria Hallelujah', cursive;
 }
 
@@ -187,6 +190,7 @@ div {
 }
 
 footer {
+  /*fotter used to style copyright logo fixed on button*/
   position: fixed;
   left: 0;
   bottom: 0;

@@ -4,7 +4,7 @@ import React, { Component } from "react";
 class Comments extends Component {
     // React render function
     render() {
-  
+        // returns list of comments for each song
         return (
             <tr><td>{this.props.comments}</td></tr>
         ); // end return

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { TextField, Button, Paper, Select, MenuItem, Grid } from "@material-ui/core";
+import { TextField, Grid } from "@material-ui/core";
 import MusicItem from "../musicitem/musicitem"
 import swal from "sweetalert";
 
@@ -20,8 +20,8 @@ class Recommendations extends Component {
       toggle: false,
       search: "",
   }
-  //fetches music list from database on mount
   componentDidMount() {
+    //fetches music list from database on mount
     this.props.dispatch({ type: "FETCH_MUSIC" });
   }
   //function to toggle
@@ -83,6 +83,7 @@ class Recommendations extends Component {
       album: "",
     })
   };
+  //search function used to search for songs
   search = (event) => {
     //prevents default action
     event.preventDefault();
@@ -99,7 +100,9 @@ class Recommendations extends Component {
       search: ""
     })
   };
+  //ties search function to enter key
   handleKeyPress = (event) => {
+    //on enter, run this function
     if (event.key === 'Enter') {
       //grabs keys in local state
       const { search } = this.state
@@ -115,7 +118,9 @@ class Recommendations extends Component {
       })
     }
   }
+  //ties addNewRecommendation function to enter button
   handleKeyPress2 = (event) => {
+    //on enter, run this function
     if (event.key === 'Enter') {
       //grabs all keys in Redux state
       const { username, profile_pic } = this.props.user;

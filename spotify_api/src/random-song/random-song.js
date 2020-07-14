@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
-import GradeIcon from '@material-ui/icons/Grade';
+import { Select, MenuItem } from "@material-ui/core";
 import Rating from '@material-ui/lab/Rating';
-import axios from "axios";
 import swal from "sweetalert";
 import { connect } from "react-redux";
 import "../App.css";
@@ -49,6 +47,7 @@ class RandomSong extends Component {
     }
   }
   componentDidMount() {
+    //fetches recommendations on load
     this.props.dispatch({ type: "FETCH_MUSIC" });
   }
   //generates new token
@@ -163,10 +162,6 @@ class RandomSong extends Component {
         market: countries[randomCountry],
       })
       .then((response) => {
-        console.log(
-          "randomSong",
-          response.tracks.items[randomIndex].external_urls.spotify
-        );
         this.setState({
           randomSong: {
             artist: response.tracks.items[randomIndex].artists[0].name, //artist
@@ -219,6 +214,7 @@ class RandomSong extends Component {
 
     //grabs all keys in Redux state
     const { username, profile_pic } = this.props.user;
+    //grabs all keys from local state
     const { song } = this.state.randomSong
     //sweet alerts
     swal({
