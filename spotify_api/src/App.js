@@ -307,7 +307,8 @@ class App extends Component {
           <br />
           <button onClick={this.toggle}>Go to Random Song</button><br />
         <Grid container item md={12}>
-      <Recommendations /> {/*...end Recommendations page */}
+      <Recommendations /> 
+      {/*...end Recommendations page */}
         </Grid>
         </>
         ) : (
@@ -324,7 +325,11 @@ class App extends Component {
           <br />
                   <button onClick={this.toggle}>Go to Recommendations</button><br />
         <Grid container item md={12}>
-                      <RandomSong/> {/*RandomSong page */}
+                      <RandomSong/> 
+                      <br />
+                      <br />
+                      <br />
+                      <br />{/*RandomSong page */}
       </Grid>
       </>
         )}

@@ -267,11 +267,15 @@ class Recommendations extends Component {
               ) : (
                   <button onClick={this.next}>Next</button>
               )}
+              <br />
+              <br />
+              <br />
               </>
               ) : (
               <>
                 <div className="App-title" style={{ color: "white" }}>Search for a song by filling in the field below and pressing "search" or by pressing the "enter" key</div>
               {/* search box */}
+              <br />
                 <TextField
                   onKeyPress={this.handleKeyPress}
                   variant="outlined"
@@ -290,6 +294,9 @@ class Recommendations extends Component {
                   // for each mapped item within it's designated component
                     return <MusicItem key={musicitem.id} musicitem={musicitem} />;
                 })}
+                <br />
+                <br />
+                <br />
               </>
               )}
         </div>
