@@ -313,7 +313,7 @@ class MusicItem extends Component {
       <table>
       <tr>
         {/* table data for each mapped item */}
-        <td><b>Posted by:</b> {musicitem.username}<br /><img className="profilePic" src={musicitem.profile_pic}/></td>
+        <td><b>Posted by:</b> {musicitem.username}<br /><img alt="profile pic" className="profilePic" src={musicitem.profile_pic}/></td>
         <td><b>Title:</b><br />{musicitem.song}</td>
         <td><b>Artist:</b><br />{musicitem.artist}</td>
         <td><b>Album:</b><br />{musicitem.album}</td>

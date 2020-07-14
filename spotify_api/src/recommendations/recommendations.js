@@ -267,7 +267,7 @@ class Recommendations extends Component {
               {/* if there are no previous items, make previous button disappear */}
               {this.state.start !== 0 && <button onClick={this.previous}>previous</button>}
               {/* if there are no next items, make next button disappear */}
-              {(this.state.start > this.props.music.length - 7) ? (
+              {(this.state.start > this.props.music.length - 6) ? (
                 <span></span> 
               ) : (
                   <button onClick={this.next}>Next</button>

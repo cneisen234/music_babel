@@ -301,7 +301,7 @@ class RandomSong extends Component {
         </table>
         {/* takes open log, places it in href, can open random song in spotify */}
   
-        <a href={this.state.randomSong.open} target="_blank">
+              <a href={this.state.randomSong.open} target="_blank" rel="noopener noreferrer">
           <button>Open this song in spotify</button>
         </a>
               <form onSubmit={this.addRandomRecommendation}>

@@ -219,7 +219,6 @@ class App extends Component {
                         }}
                         src={this.state.nowPlaying.image}
                         alt="album art"
-                        style={{ width: 100 }}
                       />
                     </div>
                   </td>

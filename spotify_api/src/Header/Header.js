@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { TextField, Button, Paper } from "@material-ui/core";
 import ReactFilestack from 'filestack-react';
-//source in spotify api framework
-import Spotify from "spotify-web-api-js";
 import swal from "sweetalert";
 
 // Header is a controlled component that renders the header of the site
@@ -141,7 +139,7 @@ class Header extends Component {
             top: 40,
             borderColor: "white"
           }}><tr><td className="name">Hello: {this.props.user.username}</td>
-            <td><img className="profilePic" src={this.props.user.profile_pic}></img></td></tr></table>
+            <td><img alt="profile pic" className="profilePic" src={this.props.user.profile_pic}></img></td></tr></table>
           ) : (
             <span></span>
           )}

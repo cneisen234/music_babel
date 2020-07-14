@@ -77,6 +77,9 @@
   background-size: cover;
   z-index: -5;
 } 
+img {
+  width: 100px;
+}
 table{
   /*styles for all tables, used mainly for the recommendations layout*/
   margin-left:auto; 
