@@ -33,7 +33,7 @@ VALUES
 CREATE TABLE "rate"
 (
     "id" serial primary key,
-    "rate_id" INT REFERENCES "recommendation",
+    "rate_id" INT REFERENCES "recommendation" ON DELETE CASCADE,
     "rate" INT,
     "created_at" TIMESTAMP,
     "updated_at" TIMESTAMP
@@ -44,7 +44,7 @@ CREATE TABLE "rate"
 CREATE TABLE "comment"
 (
     "id" serial primary key,
-    "comment_id" INT REFERENCES "recommendation",
+    "comment_id" INT REFERENCES "recommendation" ON DELETE CASCADE,
     "usercomment" varchar(20),
     "comment" TEXT,
     "created_at" TIMESTAMP,

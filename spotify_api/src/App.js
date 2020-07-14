@@ -271,10 +271,10 @@ class App extends Component {
               <Paper
                 style={{
                   right: 0,
-                  bottom: 0,
+                  bottom: 50,
                   position: "fixed",
                   borderRadius: "10%",
-                  height: "100px",
+                  height: "50px",
                   width: "150px",
                   fontSize: "15px",
                   zIndex: 10000,
@@ -305,6 +305,7 @@ class App extends Component {
   justifyContent: "center",}}>
         {this.state.toggle === false ? (
           <>
+          <br />
           <button onClick={this.toggle}>Go to Random Song</button><br />
         <Grid container item md={12}>
       <Recommendations /> {/*...end Recommendations page */}
@@ -314,9 +315,14 @@ class App extends Component {
           <>
         {!this.props.user.username ? (
           //can only generate a random song if logged in
+          <>
+          <br />
+                <button onClick={this.toggle}>Go to Recommendations</button><br />
           <p>Please log in and link to your spotify in order to use this feature</p>
+          </>
         ) : (
           <>
+          <br />
                   <button onClick={this.toggle}>Go to Recommendations</button><br />
         <Grid container item md={12}>
                       <RandomSong/> {/*RandomSong page */}

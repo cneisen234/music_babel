@@ -191,7 +191,7 @@ class Recommendations extends Component {
           <>
               {this.state.toggle === false ? ( 
                 <>
-          <div className="App-title" style={{color: "white"}}>Recommend a song by filling in the field below and pressing "Add New Recommendation" or pushing the "enter" key</div>
+          <div className="App-title" style={{color: "white"}}>Recommend a song by filling in the field below and pressing "Add New Recommendation" or pushing the "enter" key</div><br />
         <form id="addNewRecommendation" onSubmit={this.addNewRecommendation} onKeyPress={this.handleKeyPress2}>
               <Grid container spacing={1}>
                 <Grid container item md={12} lg={4}>
@@ -236,7 +236,7 @@ class Recommendations extends Component {
             onChange={(event) => this.handleChange(event, "album")} //onChange of input values set local state
           />
           </Grid>
-          </Grid>
+          </Grid><br />
                 <button type="submit">Add New Recommendation</button>
         </form>
         </>

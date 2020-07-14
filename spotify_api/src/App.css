@@ -162,7 +162,6 @@ li {
 
 div, button {
   /*used to give other google font style to other elements, also default margin of 15px*/
-  margin: 15px;
   font-family: 'Gloria Hallelujah', cursive;
 }
 
