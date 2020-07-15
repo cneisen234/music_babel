@@ -1,0 +1,58 @@
+table{
+  /*styles for all tables, used mainly for the recommendations layout*/
+  margin-left:auto; 
+    margin-right:auto;
+    margin-top: 20px;
+    border: solid black;
+    border-radius: 15px;
+    width: 100%;
+}
+
+td {
+  /*table styles and colors*/
+     background-color: black;
+  color: white;
+  margin-left: 3%;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+li {
+  /*set all list items to a list style of none*/
+  list-style-type: none;
+}
+
+.input {
+  /*ensure inputs are readable and easy to interact with*/
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+div, button {
+  /*used to give other google font style to other elements*/
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+button {
+  /*styles for all buttons not styled with Material UI*/
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  font-size: 120%;
+  border-radius: 10px;
+}
+
+button:hover {
+  /*style of buttons on hover*/
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+div {
+  /*cover most other elements*/
+  z-index: 5;
+}
+

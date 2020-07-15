@@ -3,7 +3,7 @@ import { Select, MenuItem } from "@material-ui/core";
 import Rating from '@material-ui/lab/Rating';
 import swal from "sweetalert";
 import { connect } from "react-redux";
-import "../App.css";
+import "./random-song.css";
 //source in spotify api framework
 import Spotify from "spotify-web-api-js";
 //define class of new Spotify into spotifyWebApi

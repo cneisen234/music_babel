@@ -5,6 +5,7 @@ import { TextField, Button, Paper, Select, MenuItem } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import GradeIcon from '@material-ui/icons/Grade';
 import EditIcon from '@material-ui/icons/Edit';
+import CommentIcon from '@material-ui/icons/Comment';
 import Rating from '@material-ui/lab/Rating';
 import LockIcon from '@material-ui/icons/Lock';
 import swal from "sweetalert";
@@ -410,7 +411,7 @@ class MusicItem extends Component {
             color="secondary"
             type="delete"
           >
-            View Comments
+          <CommentIcon />
               </Button></td>
             {/* toggles edit window */}
                 {this.state.toggle === false ? (
