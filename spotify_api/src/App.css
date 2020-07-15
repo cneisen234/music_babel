@@ -96,6 +96,7 @@ td {
   margin-left: 3%;
   padding: 10px;
   border-radius: 15px;
+  width: 25%;
 }
 .name {
   /*font size of display name in now listening window*/

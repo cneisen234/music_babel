@@ -273,94 +273,112 @@ class RandomSong extends Component {
     const { artists } = this.state.relatedArtists;
     return (
       <div className="App">
+        <h2>Random Song</h2>
+        <div>
+        To Generate a random song, click the Generate Random Song button
+        </div>
+        <br />
         {/* generates random song */}
         <button onClick={() => this.randomSong()}>Generate Random Song</button>
         {this.state.randomSong.artist === "artist" ? (
           //if no random song is generated render nothing, this is the default
           <span></span>
         ) : (
-            //...else render rate and open in spotify
-            <>
-        <table>
-          <tr>
-            <td>
-        <div><b>Artist:</b> {this.state.randomSong.artist}</div>
-        <div><b>Album:</b> {this.state.randomSong.album}</div>
-        <div><b>Track:</b> {this.state.randomSong.song}</div>
-        </td>
-        <td>
-        <div>
-          <img
-            src={this.state.randomSong.image}
-            alt="album art"
-            style={{ width: 100 }}
-          />
-        </div>
-        </td>
-        </tr>
-        </table>
-        {/* takes open log, places it in href, can open random song in spotify */}
-  
-              <a href={this.state.randomSong.open} target="_blank" rel="noopener noreferrer">
-          <button>Open this song in spotify</button>
-        </a>
-              <form onSubmit={this.addRandomRecommendation}>
-          <Select
-            style={{
-              backgroundColor: "white",
-            }}
-            variant="outlined"
-            required
-            name="rate"
-            //sets value of input to value of local state
-            value={this.state.rate}
-            onChange={(event) => this.handleChange(event, "rate")} //sends input values to local state
-          >
-            {/* select items 1 - 5 */}
-            <MenuItem value="5"><Rating value={5} readOnly size="small" /></MenuItem>
-            <MenuItem value="4"><Rating value={4} readOnly size="small" /></MenuItem>
-            <MenuItem value="3"><Rating value={3} readOnly size="small" /></MenuItem>
-            <MenuItem value="2"><Rating value={2} readOnly size="small" /></MenuItem>
-            <MenuItem value="1"><Rating value={1} readOnly size="small" /></MenuItem>
-          </Select>
-          <button
-            variant="contained"
-            color="secondary"
-            type="submit"
-          >
-            Rate this song?
-            </button>
-        </form>
-        {/* gives a list of artists that are similar to randomly generated one. */}
-        <table className="similar">
-          <tr>
-            Similar Artists:
-          </tr>
-          <tr>
-            <td>
-              {/* renders first 10 similar artists on left colomn */}
-        <ul>
-          {artists.map((artist, index) => {
-            if (index < 10) {
-            return <li key={index}>{artist}</li>;
-            }
-          })}
-        </ul>
-        </td>
-        {/* renders last 10 similar artists on right colomn */}
-        <td>
-        {artists.map((artist, index) => {
-        if (index >= 10) {
-             return <li key={index}>{artist}</li>;
-          }
-        })}
-        </td>
-        </tr>
-        </table>
-            </>
-          )}
+          //...else render rate and open in spotify
+          <>
+            <table>
+              <tr>
+                <td>
+                  <div>
+                    <b>Artist:</b> {this.state.randomSong.artist}
+                  </div>
+                  <div>
+                    <b>Album:</b> {this.state.randomSong.album}
+                  </div>
+                  <div>
+                    <b>Track:</b> {this.state.randomSong.song}
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <img
+                      src={this.state.randomSong.image}
+                      alt="album art"
+                      style={{ width: 100 }}
+                    />
+                  </div>
+                </td>
+              </tr>
+            </table>
+            {/* takes open log, places it in href, can open random song in spotify */}
+
+            <a
+              href={this.state.randomSong.open}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button>Open this song in spotify</button>
+            </a>
+            <form onSubmit={this.addRandomRecommendation}>
+              <Select
+                style={{
+                  backgroundColor: "white",
+                }}
+                variant="outlined"
+                required
+                name="rate"
+                //sets value of input to value of local state
+                value={this.state.rate}
+                onChange={(event) => this.handleChange(event, "rate")} //sends input values to local state
+              >
+                {/* select items 1 - 5 */}
+                <MenuItem value="5">
+                  <Rating value={5} readOnly size="small" />
+                </MenuItem>
+                <MenuItem value="4">
+                  <Rating value={4} readOnly size="small" />
+                </MenuItem>
+                <MenuItem value="3">
+                  <Rating value={3} readOnly size="small" />
+                </MenuItem>
+                <MenuItem value="2">
+                  <Rating value={2} readOnly size="small" />
+                </MenuItem>
+                <MenuItem value="1">
+                  <Rating value={1} readOnly size="small" />
+                </MenuItem>
+              </Select>
+              <button variant="contained" color="secondary" type="submit">
+                Rate this song?
+              </button>
+            </form>
+            {/* gives a list of artists that are similar to randomly generated one. */}
+            <table className="similar">
+              <tr>Similar Artists:</tr>
+              <tr>
+                <td>
+                  {/* renders first 10 similar artists on left colomn */}
+                  <ul>
+                    {artists.map((artist, index) => {
+                      if (index < 10) {
+                        return <li key={index}>{artist}</li>;
+                      }
+                    })}
+                  </ul>
+                </td>
+                {/* renders last 10 similar artists on right colomn */}
+                <td>
+                  {artists.map((artist, index) => {
+                    if (index >= 10) {
+                      return <li key={index}>{artist}</li>;
+                    }
+                  })}
+                </td>
+              </tr>
+            </table>
+          </>
+        )}
       </div>
-      
     ); //end return
   } //end render
 } //end RandomSong
