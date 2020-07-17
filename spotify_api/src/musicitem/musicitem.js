@@ -521,8 +521,10 @@ class MusicItem extends Component {
                 backgroundColor: "white",
               }}> 
                   {this.props.user.username ? (
+                    <>
+                    <h3 style={{color: "black"}}>Comments on {this.props.musicitem.song}</h3>
               <form onSubmit={this.comment} onKeyPress={this.handleKeyPress}>
-                    {/* album */}
+                    {/* Comment */}
                     <TextField
                       variant="outlined"
                       required
@@ -544,6 +546,7 @@ class MusicItem extends Component {
                       Comment
             </button>
                   </form>
+                  </>
                   ) : (
                     <span></span>
                   )}
